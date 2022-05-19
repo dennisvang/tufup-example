@@ -2,24 +2,31 @@ import logging
 import sys
 
 from notsotuf.common import Patcher
-from notsotuf.repo import (
-    Keys, Roles, TOP_LEVEL_ROLE_NAMES, in_, make_gztar_archive
-)
+from notsotuf.repo import Keys, Roles, in_, make_gztar_archive
 
 from init_repo import (
-    KEY_NAME, KEYS_DIR, METADATA_DIR, MODULE_DIR, PRIVATE_KEY_PATH, TARGETS_DIR
+    DEV_DIR,
+    ENCRYPTED_KEYS,
+    KEY_MAP,
+    KEYS_DIR,
+    METADATA_DIR,
+    PRIVATE_KEY_PATH,
+    TARGETS_DIR,
 )
 from myapp.settings import APP_NAME, CURRENT_VERSION
 
 logger = logging.getLogger(__name__)
 
 PYINSTALLER_DIST_DIR_NAME = 'dist'
-DIST_DIR = MODULE_DIR / PYINSTALLER_DIST_DIR_NAME
+DIST_DIR = DEV_DIR / PYINSTALLER_DIST_DIR_NAME
 
 if __name__ == '__main__':
     # create archive from latest pyinstaller bundle (assuming we have already
     # created a pyinstaller bundle, and there is only one)
-    bundle_dirs = [path for path in DIST_DIR.iterdir() if path.is_dir()]
+    try:
+        bundle_dirs = [path for path in DIST_DIR.iterdir() if path.is_dir()]
+    except FileNotFoundError:
+        sys.exit(f'Directory not found: {DIST_DIR}\nDid you run pyinstaller?')
     if len(bundle_dirs) != 1:
         sys.exit(f'Expected one bundle, found {len(bundle_dirs)}.')
     bundle_dir = bundle_dirs[0]
@@ -29,10 +36,8 @@ if __name__ == '__main__':
     )
 
     # load metadata
-    keys = Keys(dir_path=KEYS_DIR, encrypted=[])
-    for role_name in TOP_LEVEL_ROLE_NAMES:
-        keys.import_public_key(role_name=role_name, key_name=KEY_NAME)
-    roles = Roles(dir_path=METADATA_DIR, encrypted=[])
+    keys = Keys(dir_path=KEYS_DIR, encrypted=ENCRYPTED_KEYS, key_map=KEY_MAP)
+    roles = Roles(dir_path=METADATA_DIR)
     roles.initialize(keys=keys)
 
     # check latest archive before registering the new one
@@ -43,10 +48,12 @@ if __name__ == '__main__':
 
         # create patch, if possible, and register that too
         if latest_archive:
+            logger.info(f'Creating patch for {new_archive}')
             patch_path = Patcher.create_patch(
                 src_path=TARGETS_DIR / latest_archive.path,
                 dst_path=TARGETS_DIR / new_archive.path,
             )
+            logger.info(f'Patch created.')
             roles.add_or_update_target(local_path=patch_path)
 
         # publish updated targets (can safely be called if nothing has changed)
