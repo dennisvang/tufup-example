@@ -45,3 +45,10 @@ TARGET_DIR = UPDATE_CACHE_DIR / 'targets'
 # Update-server urls
 METADATA_BASE_URL = 'http://localhost:8000/metadata/'
 TARGET_BASE_URL = 'http://localhost:8000/targets/'
+
+# Location of trusted root metadata file
+TRUSTED_ROOT_SRC = MODULE_DIR.parent / 'root.json'
+if not FROZEN:
+    # for development, get the root metadata directly from local repo
+    TRUSTED_ROOT_SRC = MODULE_DIR.parent.parent / 'repo/deploy/metadata/root.json'
+TRUSTED_ROOT_DST = METADATA_DIR / 'root.json'
