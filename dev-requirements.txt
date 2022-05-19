@@ -1,4 +1,0 @@
-# pip install -r dev-requirements.txt
-
-notsotuf
-pyinstaller
