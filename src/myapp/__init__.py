@@ -22,7 +22,8 @@ def update(pre: str):
     )
 
     # Perform update
-    client.update(pre=pre)
+    if client.check_for_updates(pre=pre):
+        client.download_and_apply_update()
 
 
 def main(cmd_args):
@@ -37,10 +38,8 @@ def main(cmd_args):
     # which is created using the notsotuf.repo tools. The app must ensure
     # this file can be found in the specified metadata_dir. The root metadata
     # file lists all trusted keys and TUF roles.
-    source_path = settings.MODULE_DIR.parent / 'root.json'
-    destination_path = settings.METADATA_DIR / 'root.json'
-    if not destination_path.exists():
-        shutil.copy(src=source_path, dst=destination_path)
+    if not settings.TRUSTED_ROOT_DST.exists():
+        shutil.copy(src=settings.TRUSTED_ROOT_SRC, dst=settings.TRUSTED_ROOT_DST)
         logger.info('Trusted root metadata copied to cache.')
 
     # Download and apply any available updates
