@@ -1,9 +1,9 @@
 # __pycache__/ in global core.excludesFile or in .git/info/exclude
 
 # directories
-repo/
 temp/
 build/
 dist/
 
 # files
+.notsotuf-repo-config

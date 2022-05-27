@@ -1,7 +1,11 @@
 import logging
 import pathlib
 
-from notsotuf.repo import Keys, Roles, TOP_LEVEL_ROLE_NAMES, in_
+from notsotuf.repo import (
+    DEFAULT_KEY_MAP, DEFAULT_KEYS_DIR_NAME, DEFAULT_REPO_DIR_NAME, Repository
+)
+
+from myapp.settings import APP_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -22,41 +26,33 @@ MODULE_DIR = pathlib.Path(__file__).resolve().parent
 DEV_DIR = MODULE_DIR / 'temp'
 
 # Local repo path and keys path (would normally be offline)
-REPO_DIR = DEV_DIR / 'repo'
-KEYS_DIR = REPO_DIR / 'keystore'
-DEPLOY_DIR = REPO_DIR / 'deploy'
-METADATA_DIR = DEPLOY_DIR / 'metadata'
-TARGETS_DIR = DEPLOY_DIR / 'targets'
+KEYS_DIR = DEV_DIR / DEFAULT_KEYS_DIR_NAME
+REPO_DIR = DEV_DIR / DEFAULT_REPO_DIR_NAME
 
 # Key settings
 KEY_NAME = 'my_key'
-KEY_MAP = {role_name: KEY_NAME for role_name in TOP_LEVEL_ROLE_NAMES}
 PRIVATE_KEY_PATH = KEYS_DIR / KEY_NAME
+KEY_MAP = {role_name: KEY_NAME for role_name in DEFAULT_KEY_MAP.keys()}
 ENCRYPTED_KEYS = []
 
 # Expiration dates
-ROOT_EXPIRATION_DATE = in_(365)
+EXPIRATION_DAYS = dict(root=365, targets=7, snapshot=7, timestamp=1)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
-    # Ensure dirs exist
-    for path in [KEYS_DIR, METADATA_DIR, TARGETS_DIR]:
-        path.mkdir(parents=True, exist_ok=True)
+    # Create repository instance
+    repo = Repository(
+        app_name=APP_NAME,
+        repo_dir=REPO_DIR,
+        keys_dir=KEYS_DIR,
+        key_map=KEY_MAP,
+        expiration_days=EXPIRATION_DAYS,
+        encrypted_keys=ENCRYPTED_KEYS,
+    )
 
-    # For convenience, we use a single, unencrypted, key pair for all tuf
-    # roles. This is *not* recommended for production.
-    keys = Keys(dir_path=KEYS_DIR, encrypted=ENCRYPTED_KEYS, key_map=KEY_MAP)
-    keys.create()  # safe to call if keys already exist
+    # Save configuration (JSON file)
+    repo.save_config()
 
-    # Initialize root metadata object
-    roles = Roles(dir_path=METADATA_DIR)
-
-    if not roles.root:
-        # Register keys
-        roles.initialize(keys=keys)
-
-        # Publish metadata (saves root.json file)
-        roles.publish_root(
-            private_key_paths=[PRIVATE_KEY_PATH], expires=ROOT_EXPIRATION_DATE
-        )
+    # Initialize repository (creates keys and root metadata, if necessary)
+    repo.initialize()
