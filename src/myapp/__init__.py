@@ -13,7 +13,7 @@ def update(pre: str):
     client = Client(
         app_name=settings.APP_NAME,
         app_install_dir=settings.INSTALL_DIR,
-        current_version=settings.CURRENT_VERSION,
+        current_version=settings.APP_VERSION,
         metadata_dir=settings.METADATA_DIR,
         metadata_base_url=settings.METADATA_BASE_URL,
         target_dir=settings.TARGET_DIR,
@@ -46,7 +46,7 @@ def main(cmd_args):
     update(pre=pre_release_channel)
 
     # Do what the app is supposed to do
-    print(f'Starting {settings.APP_NAME} {settings.CURRENT_VERSION}...')
+    print(f'Starting {settings.APP_NAME} {settings.APP_VERSION}...')
     ...
     print('Doing what the app is supposed to do...')
     ...

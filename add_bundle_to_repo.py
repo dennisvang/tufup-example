@@ -4,7 +4,7 @@ import sys
 from notsotuf.repo import Repository
 
 from init_repo import DEV_DIR
-from myapp.settings import CURRENT_VERSION
+from myapp.settings import APP_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -27,4 +27,4 @@ if __name__ == '__main__':
     repo = Repository.from_config()
 
     # Add new app bundle to repository
-    repo.add_bundle(new_version=CURRENT_VERSION, new_bundle_dir=bundle_dir)
+    repo.add_bundle(new_version=APP_VERSION, new_bundle_dir=bundle_dir)
