@@ -3,7 +3,7 @@ import sys
 
 from notsotuf.repo import Repository
 
-from init_repo import DEV_DIR
+from repo_init import DEV_DIR
 from myapp.settings import APP_VERSION
 
 logger = logging.getLogger(__name__)

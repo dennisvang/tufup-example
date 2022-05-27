@@ -1,7 +1,7 @@
 import logging
 from notsotuf.repo import Keys, Roles, TOP_LEVEL_ROLE_NAMES, in_
 
-from init_repo import KEY_NAME, KEYS_DIR, METADATA_DIR
+from repo_init import KEY_NAME, KEYS_DIR, METADATA_DIR
 
 logger = logging.getLogger(__name__)
 
