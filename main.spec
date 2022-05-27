@@ -8,7 +8,7 @@ a = Analysis(
     ['src\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[('temp\\repo\\deploy\\metadata\\root.json', '.')],
+    datas=[('temp\\repository\\metadata\\root.json', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
