@@ -23,14 +23,14 @@ The following basic steps are covered:
 
 ### Repo side
 
-Starting from a clean repo, i.e. no `repo` folder is present.
+Starting from a clean repo, i.e. no `repository` folder is present.
 
-1. run `init_repo.py` 
-2. run `create_pyinstaller_bundle.bat`
-3. run `add_target_to_repo.py`
-4. modify the app, and increment `CURRENT_VERSION` in `settings.py`
+1. run `repo_init.py` 
+2. run `create_pyinstaller_bundle.bat` (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
+3. run `repo_add_bundle.py`
+4. modify the app, and increment `APP_VERSION` in `myapp/settings.py`
 5. run `create_pyinstaller_bundle.bat` again
-6. run `add_target_to_repo.py` again
+6. run `repo_add_bundle.py` again
 
 Now we should have a `temp` dir (see `DEV_DIR` in `settings.py`) with the following structure:
 
@@ -38,18 +38,17 @@ Now we should have a `temp` dir (see `DEV_DIR` in `settings.py`) with the follow
 temp
 ├ build
 ├ dist
-└ repo
-  ├ deploy
-  │ ├ metadata
-  │ └ targets
-  └ keystore
+├ keystore
+└ repository
+  ├ metadata
+  └ targets 
 ```
 
 In the `targets` dir we find two app archives (1.0 and 2.0) and a corresponding patch file.
 
 We can serve the repository on localhost as follows (relative to project root):
 
-    python -m http.server -d temp/repo/deploy
+    python -m http.server -d temp/repository
 
 That's it for the repo-side.
 
@@ -57,8 +56,8 @@ That's it for the repo-side.
 
 On the same system (for convenience):
 
-1. manually extract the archive version 1.0 from the `repo/deploy/targets` dir into the `INSTALL_DIR` specified in `settings.py` (this simulates an installation on a client device)
-2. [optional] to try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (normally done during installation)
+1. manually extract the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR` specified in `myapp/settings.py` (this simulates an installation on a client device)
+2. [optional] to try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer)
 3. assuming the repo files are being served on localhost, we can now run the newly extracted executable from `INSTALL_DIR` (`main.exe`), and it will perform an update
 4. metadata and targets are stored in the `UPDATE_CACHE_DIR`
 
