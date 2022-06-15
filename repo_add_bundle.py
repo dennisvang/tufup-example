@@ -3,12 +3,10 @@ import sys
 
 from notsotuf.repo import Repository
 
-from repo_init import DEV_DIR
+from repo_settings import DIST_DIR, KEYS_DIR
 
 logger = logging.getLogger(__name__)
 
-PYINSTALLER_DIST_DIR_NAME = 'dist'
-DIST_DIR = DEV_DIR / PYINSTALLER_DIST_DIR_NAME
 
 if __name__ == '__main__':
     # create archive from latest pyinstaller bundle (assuming we have already
@@ -27,3 +25,4 @@ if __name__ == '__main__':
 
     # Add new app bundle to repository (automatically reads myapp.__version__)
     repo.add_bundle(new_bundle_dir=bundle_dir)
+    repo.publish_changes(private_key_dirs=[KEYS_DIR])

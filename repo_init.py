@@ -1,11 +1,11 @@
 import logging
-import pathlib
 
-from notsotuf.repo import (
-    DEFAULT_KEY_MAP, DEFAULT_KEYS_DIR_NAME, DEFAULT_REPO_DIR_NAME, Repository
-)
+from notsotuf.repo import Repository
 
 from myapp.settings import APP_NAME
+from repo_settings import (
+    ENCRYPTED_KEYS, EXPIRATION_DAYS, KEY_MAP, KEYS_DIR, REPO_DIR, THRESHOLDS
+)
 
 logger = logging.getLogger(__name__)
 
@@ -19,25 +19,6 @@ safe and should *not* be used in production.
 
 """
 
-# Path to directory containing current module
-MODULE_DIR = pathlib.Path(__file__).resolve().parent
-
-# For development
-DEV_DIR = MODULE_DIR / 'temp'
-
-# Local repo path and keys path (would normally be offline)
-KEYS_DIR = DEV_DIR / DEFAULT_KEYS_DIR_NAME
-REPO_DIR = DEV_DIR / DEFAULT_REPO_DIR_NAME
-
-# Key settings
-KEY_NAME = 'my_key'
-PRIVATE_KEY_PATH = KEYS_DIR / KEY_NAME
-KEY_MAP = {role_name: KEY_NAME for role_name in DEFAULT_KEY_MAP.keys()}
-ENCRYPTED_KEYS = []
-
-# Expiration dates
-EXPIRATION_DAYS = dict(root=365, targets=7, snapshot=7, timestamp=1)
-
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
@@ -50,6 +31,7 @@ if __name__ == '__main__':
         key_map=KEY_MAP,
         expiration_days=EXPIRATION_DAYS,
         encrypted_keys=ENCRYPTED_KEYS,
+        thresholds=THRESHOLDS,
     )
 
     # Save configuration (JSON file)

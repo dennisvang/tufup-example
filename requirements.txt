@@ -1,4 +1,5 @@
 # pip install -r requirements.txt
 
 # latest from git repo (https://pip.pypa.io/en/stable/topics/vcs-support/#git)
-notsotuf @ git+https://github.com/dennisvang/notsotuf.git@master
+#notsotuf @ git+https://github.com/dennisvang/notsotuf.git@master
+C:\Users\Dennis\Documents\repositories\notsotuf

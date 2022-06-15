@@ -1,3 +1,4 @@
 # pip install -r requirements-dev.txt
 
 pyinstaller
+setuptools>=61.0.0
