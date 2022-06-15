@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 # App info
 APP_NAME = 'my_app'
-APP_VERSION = '3.0'
+APP_VERSION = '1.0'
 
 # On Windows 10, a typical location for app data would be %PROGRAMDATA%\MyApp
 # (per-machine), or %LOCALAPPDATA%\MyApp (per-user). Typical app installation
