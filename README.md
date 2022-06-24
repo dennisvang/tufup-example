@@ -58,8 +58,9 @@ On the same system (for convenience):
 
 1. manually extract the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR` specified in `myapp/settings.py` (this simulates an installation on a client device)
 2. [optional] to try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer)
-3. assuming the repo files are being served on localhost, we can now run the newly extracted executable from `INSTALL_DIR` (`main.exe`), and it will perform an update
-4. metadata and targets are stored in the `UPDATE_CACHE_DIR`
+3. [optional] set environment variable `set SETUPTOOLS_USE_DISTUTILS=stdlib`, to work around PyInstaller issue #6911  (powershell: `$Env:SETUPTOOLS_USE_DISTUTILS = 'stdlib'`)
+4. assuming the repo files are being served on localhost, we can now run the newly extracted executable from `INSTALL_DIR` (`main.exe`), and it will perform an update
+5. metadata and targets are stored in the `UPDATE_CACHE_DIR`
 
 ### Troubleshooting
 
