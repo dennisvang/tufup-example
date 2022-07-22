@@ -1,5 +1,6 @@
 import logging
 import shutil
+import time
 
 from tufup.client import Client
 
@@ -8,6 +9,14 @@ from myapp import settings
 logger = logging.getLogger(__name__)
 
 __version__ = settings.APP_VERSION
+
+
+def progress_hook(bytes_downloaded: int, bytes_expected: int):
+    progress_percent = bytes_downloaded / bytes_expected * 100
+    print(f'\r{progress_percent:.1f}%', end='')
+    time.sleep(0.5)  # quick and dirty: simulate slow or large download
+    if progress_percent >= 100:
+        print('')
 
 
 def update(pre: str):
@@ -25,7 +34,7 @@ def update(pre: str):
 
     # Perform update
     if client.check_for_updates(pre=pre):
-        client.download_and_apply_update()
+        client.download_and_apply_update(progress_hook=progress_hook)
 
 
 def main(cmd_args):
