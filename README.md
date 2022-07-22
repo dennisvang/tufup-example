@@ -25,12 +25,12 @@ The following basic steps are covered:
 
 Starting from a clean repo, i.e. no `repository` folder is present.
 
-1. run `repo_init.py` 
+1. run `repo_init.py` (cli: `tufup init`)
 2. run `create_pyinstaller_bundle.bat` (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
-3. run `repo_add_bundle.py`
+3. run `repo_add_bundle.py` (cli: `tufup targets add 1.0 temp/dist temp/keystore`)
 4. modify the app, and increment `APP_VERSION` in `myapp/settings.py`
 5. run `create_pyinstaller_bundle.bat` again
-6. run `repo_add_bundle.py` again
+6. run `repo_add_bundle.py` again (cli: `tufup targets add 2.0 temp/dist temp/keystore`)
 
 Now we should have a `temp` dir (see `DEV_DIR` in `settings.py`) with the following structure:
 
