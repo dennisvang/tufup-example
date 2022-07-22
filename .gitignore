@@ -6,4 +6,4 @@ build/
 dist/
 
 # files
-.notsotuf-repo-config
+.tufup-repo-config
