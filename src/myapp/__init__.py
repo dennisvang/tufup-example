@@ -1,7 +1,7 @@
 import logging
 import shutil
 
-from notsotuf.client import Client
+from tufup.client import Client
 
 from myapp import settings
 
@@ -37,7 +37,7 @@ def main(cmd_args):
         dir_path.mkdir(exist_ok=True, parents=True)
 
     # The app must be shipped with a trusted "root.json" metadata file,
-    # which is created using the notsotuf.repo tools. The app must ensure
+    # which is created using the tufup.repo tools. The app must ensure
     # this file can be found in the specified metadata_dir. The root metadata
     # file lists all trusted keys and TUF roles.
     if not settings.TRUSTED_ROOT_DST.exists():

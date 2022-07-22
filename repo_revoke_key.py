@@ -1,5 +1,5 @@
 import logging
-from notsotuf.repo import Keys, Roles, TOP_LEVEL_ROLE_NAMES, in_
+from tufup.repo import Keys, Roles, TOP_LEVEL_ROLE_NAMES, in_
 
 from repo_init import KEY_NAME, KEYS_DIR, METADATA_DIR
 

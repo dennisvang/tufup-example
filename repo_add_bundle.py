@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from notsotuf.repo import Repository
+from tufup.repo import Repository
 
 from repo_settings import DIST_DIR, KEYS_DIR
 

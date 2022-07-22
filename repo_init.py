@@ -1,6 +1,6 @@
 import logging
 
-from notsotuf.repo import Repository
+from tufup.repo import Repository
 
 from myapp.settings import APP_NAME
 from repo_settings import (
