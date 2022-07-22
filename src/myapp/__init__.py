@@ -7,6 +7,8 @@ from myapp import settings
 
 logger = logging.getLogger(__name__)
 
+__version__ = settings.APP_VERSION
+
 
 def update(pre: str):
     # Create update client

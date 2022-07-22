@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # Create repository instance
     repo = Repository(
         app_name=APP_NAME,
-        app_version_attr='myapp.settings.APP_VERSION',
+        app_version_attr='myapp.__version__',
         repo_dir=REPO_DIR,
         keys_dir=KEYS_DIR,
         key_map=KEY_MAP,
