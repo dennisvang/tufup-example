@@ -7,7 +7,7 @@ This is done by means of a dummy application `myapp` that uses `tufup` in combin
 
 Create a virtualenv (or equivalent) and install requirements:
 
-`pip install -r requirements.txt --upgrade`
+`pip install -r requirements.txt -r requirements-dev.txt --upgrade`
 
 ## Getting started
 
