@@ -1,12 +1,26 @@
+# TUF-Updater (tufup) example application
+
+This repository shows how to use the [tufup][1] package for automated application updates.
+This is done by means of a dummy application `myapp` that uses `tufup` in combination with `pyinstaller`. 
+
+## Setup
+
+Create a virtualenv (or equivalent) and install requirements:
+
+`pip install -r requirements.txt --upgrade`
+
 ## Getting started
 
-This example simulates a complete update cycle, for a dummy application, using the `notsotuf` package.
+For basic terminology, see documentation for [TUF (The Update Framework)][2].
 
-We start out with a dummy application that has already integrated the `notsotuf.client`.
+We start out with a dummy application that has already integrated the `tufup.client`.
+See `src/myapp/__init__.py` for details.
 
-There is also a basic PyInstaller `.spec` file that ensures the `notsotuf` root metadata file (`root.json`) is included in the application bundles.
+The dummy application is bundled using [PyInstaller][3], but `tufup` works with any type of "application bundle" (i.e. just a directory with content representing the application).
 
-The application specifies where all `notsotuf`-related  files will be stored.
+The example includes a basic PyInstaller `.spec` file that ensures the `tufup` root metadata file (`root.json`) is included in the application bundle.
+
+The dummy *application* specifies where all `tufup`-related  files will be stored.
 This is illustrated in `settings.py`. 
 
 The following basic steps are covered:
@@ -23,16 +37,23 @@ The following basic steps are covered:
 
 ### Repo side
 
-Starting from a clean repo, i.e. no `repository` folder is present.
+Some example scripts are provided for initializing a tufup repository and for adding new versions, see `repo_*.py`.
 
-1. run `repo_init.py` (cli: `tufup init`)
+Alternatively, `tufup` offers a command line interface (CLI) for repository actions. 
+Type `tufup -h` on the command line for more information. 
+
+Here's how to set up the example tufup repository, starting from a clean repo, i.e. no `temp` dir is present in the repo root (as defined by `DEV_DIR` in `settings.py`):
+
+Note: If you use the CLI, see `repo_settings.py` for sensible values.
+
+1. run `repo_init.py` (CLI: `tufup init`)
 2. run `create_pyinstaller_bundle.bat` (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
-3. run `repo_add_bundle.py` (cli: `tufup targets add 1.0 temp/dist temp/keystore`)
-4. modify the app, and increment `APP_VERSION` in `myapp/settings.py`
+3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist temp/keystore`)
+4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
 5. run `create_pyinstaller_bundle.bat` again
-6. run `repo_add_bundle.py` again (cli: `tufup targets add 2.0 temp/dist temp/keystore`)
+6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp/dist temp/keystore`)
 
-Now we should have a `temp` dir (see `DEV_DIR` in `settings.py`) with the following structure:
+Now we should have a `temp` dir with the following structure:
 
 ```text
 temp
@@ -70,3 +91,7 @@ If this is the case, it is often easiest to start from a clean slate for both re
 1. for the client-side, remove `UPDATE_CACHE_DIR` and `INSTALL_DIR`
 2. for the repo-side, remove `DEV_DIR` (i.e. the `temp` dir described above)
 3. follow the steps above for both repo-side and client-side
+
+[1]: https://github.com/dennisvang/tufup
+[2]: https://theupdateframework.io/
+[3]: https://pyinstaller.org/en/stable/
