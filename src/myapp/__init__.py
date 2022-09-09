@@ -34,7 +34,16 @@ def update(pre: str):
 
     # Perform update
     if client.check_for_updates(pre=pre):
-        client.download_and_apply_update(progress_hook=progress_hook)
+        client.download_and_apply_update(
+            # WARNING: Be very careful with purge_dst_dir=True, because this
+            # will delete *EVERYTHING* inside the app_install_dir, except
+            # paths specified in exclude_from_purge. So, only use
+            # purge_dst_dir=True if you are certain that your app_install_dir
+            # does not contain any unrelated content.
+            progress_hook=progress_hook,
+            purge_dst_dir=False,
+            exclude_from_purge=None,
+        )
 
 
 def main(cmd_args):
