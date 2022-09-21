@@ -43,6 +43,7 @@ def update(pre: str):
             progress_hook=progress_hook,
             purge_dst_dir=False,
             exclude_from_purge=None,
+            log_file_name='install.log',
         )
 
 
