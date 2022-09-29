@@ -14,7 +14,7 @@ __version__ = settings.APP_VERSION
 def progress_hook(bytes_downloaded: int, bytes_expected: int):
     progress_percent = bytes_downloaded / bytes_expected * 100
     print(f'\r{progress_percent:.1f}%', end='')
-    time.sleep(0.5)  # quick and dirty: simulate slow or large download
+    time.sleep(0.2)  # quick and dirty: simulate slow or large download
     if progress_percent >= 100:
         print('')
 
