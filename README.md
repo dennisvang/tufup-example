@@ -1,7 +1,11 @@
-# TUF-Updater (tufup) example application
+# Tufup (TUF-updater) example application 
 
 This repository shows how to use the [tufup][1] package for automated application updates.
-This is done by means of a dummy application `myapp` that uses `tufup` in combination with `pyinstaller`. 
+
+This is done by means of a dummy Windows-application, called `myapp`, that uses `tufup` in combination with `pyinstaller`. 
+
+NOTE: Although the example application is written for Windows, this only pertains to the user directories, etc., defined in `settings.py`.
+You can modify these directories to adapt the example to other operating systems.
 
 ## Setup
 
