@@ -4,8 +4,8 @@ This repository shows how to use the [tufup][1] package for automated applicatio
 
 This is done by means of a dummy Windows-application, called `myapp`, that uses `tufup` in combination with `pyinstaller`. 
 
-NOTE: Although the example application is written for Windows, this only pertains to the user directories, etc., defined in `settings.py`.
-You can modify these directories to adapt the example to other operating systems.
+NOTE: Although the example application is written for Windows, this only pertains to the directories, defined in `settings.py`, and the batch file used to run PyInstaller.
+You can simply adapt these to use the example on other operating systems.
 
 ## Setup
 
