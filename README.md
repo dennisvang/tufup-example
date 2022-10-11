@@ -81,10 +81,15 @@ That's it for the repo-side.
 
 On the same system (for convenience):
 
-1. manually extract the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR` specified in `myapp/settings.py`, e.g. using `tar -xf my_app-1.0.tar.gz` on the command line (this simulates an installation on a client device)
-2. [optional] to try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer)
-3. assuming the repo files are being served on localhost, we can now run the newly extracted executable from `INSTALL_DIR` (`main.exe`), and it will perform an update
-4. metadata and targets are stored in the `UPDATE_CACHE_DIR`
+1. To simulate the initial installation on a client device, we do a manual extraction of the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR`, specified in `myapp/settings.py`. 
+   In the default example the `INSTALL_DIR` would be the `C:\users\<username>\AppData\Local\Programs\my_app` directory. 
+   On Windows you can use `tar -xf my_app-1.0.tar.gz` in PowerShell to extract the bundle.
+2. [optional] To try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
+3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe`, directly from the `INSTALL_DIR`, and it will perform an update.
+4. Metadata and targets are stored in the `UPDATE_CACHE_DIR`.
+
+BEWARE: The steps above refer to the `INSTALL_DIR` for the `FROZEN` state, typically `C:\users\<username>\AppData\Local\Programs\my_app` on Windows.
+In development, when running the `myapp` example directly from source, i.e. `FROZEN=False`, the `INSTALL_DIR` is different from the actual install dir that would be used in production. See details in [settings.py][4]. 
 
 ### Troubleshooting
 
@@ -99,3 +104,4 @@ If this is the case, it is often easiest to start from a clean slate for both re
 [1]: https://github.com/dennisvang/tufup
 [2]: https://theupdateframework.io/
 [3]: https://pyinstaller.org/en/stable/
+[4]: https://github.com/dennisvang/tufup-example/blob/2af43175d39417f9d3d855d7e8fb2cb6ebd3c155/src/myapp/settings.py#L38
