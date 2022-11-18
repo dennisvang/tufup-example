@@ -99,7 +99,8 @@ If this is the case, it is often easiest to start from a clean slate for both re
 
 1. for the client-side, remove `UPDATE_CACHE_DIR` and `INSTALL_DIR`
 2. for the repo-side, remove `DEV_DIR` (i.e. the `temp` dir described above)
-3. follow the steps above for both repo-side and client-side
+3. remove `.tufup_repo_config`
+4. follow the steps above to set up the repo-side and client-side
 
 [1]: https://github.com/dennisvang/tufup
 [2]: https://theupdateframework.io/
