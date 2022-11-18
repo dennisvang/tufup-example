@@ -52,7 +52,7 @@ Note: If you use the CLI, see `repo_settings.py` for sensible values.
 
 1. run `repo_init.py` (CLI: `tufup init`)
 2. run `create_pyinstaller_bundle.bat` (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
-3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist temp/keystore`)
+3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist/main temp/keystore`)
 4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
 5. run `create_pyinstaller_bundle.bat` again
 6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp/dist temp/keystore`)
