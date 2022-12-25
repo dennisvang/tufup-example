@@ -51,7 +51,8 @@ Here's how to set up the example tufup repository, starting from a clean repo, i
 Note: If you use the CLI, see `repo_settings.py` for sensible values.
 
 1. run `repo_init.py` (CLI: `tufup init`)
-2. run `create_pyinstaller_bundle.bat` (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
+2. run `create_pyinstaller_bundle.bat` or `create_pyinstaller_bundle_mac.sh` (CLI: `tufup build`)
+   (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
 3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist/main temp/keystore`)
 4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
 5. run `create_pyinstaller_bundle.bat` again
@@ -82,10 +83,17 @@ That's it for the repo-side.
 On the same system (for convenience):
 
 1. To simulate the initial installation on a client device, we do a manual extraction of the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR`, specified in `myapp/settings.py`. 
+
+   #### On Windows:
    In the default example the `INSTALL_DIR` would be the `C:\users\<username>\AppData\Local\Programs\my_app` directory. 
-   On Windows you can use `tar -xf my_app-1.0.tar.gz` in PowerShell to extract the bundle.
+   You can use `tar -xf my_app-1.0.tar.gz` in PowerShell to extract the bundle.
+
+   #### On macOS:
+   To install the bundle on macOS to the default location, you can use 
+   `mkdir -p ~/Applications/my_app && tar -xf temp/repository/targets/my_app-1.0.tar.gz -C ~/Applications/my_app`.
+
 2. [optional] To try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
-3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe`, directly from the `INSTALL_DIR`, and it will perform an update.
+3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe` / `main`, directly from the `INSTALL_DIR`, and it will perform an update.
 4. Metadata and targets are stored in the `UPDATE_CACHE_DIR`.
 
 BEWARE: The steps above refer to the `INSTALL_DIR` for the `FROZEN` state, typically `C:\users\<username>\AppData\Local\Programs\my_app` on Windows.

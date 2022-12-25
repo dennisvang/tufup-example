@@ -1,6 +1,7 @@
 import logging
 import os
 import pathlib
+import platform
 import sys
 
 logger = logging.getLogger(__name__)
@@ -15,14 +16,6 @@ APP_VERSION = '1.0'
 # %LOCALAPPDATA%\Programs\MyApp (per-user). Also see:
 # https://docs.microsoft.com/en-us/windows/win32/msi/installation-context
 
-# Windows per-machine paths
-WIN_PER_MACHINE_PROGRAMS_DIR = pathlib.Path(os.getenv('ProgramFiles'))
-WIN_PER_MACHINE_DATA_DIR = pathlib.Path(os.getenv('PROGRAMDATA'))
-
-# Windows per-user paths
-WIN_PER_USER_DATA_DIR = pathlib.Path(os.getenv('LOCALAPPDATA'))
-WIN_PER_USER_PROGRAMS_DIR = WIN_PER_USER_DATA_DIR / 'Programs'
-
 # Current module dir (when frozen this equals sys._MEIPASS)
 # https://pyinstaller.org/en/stable/runtime-information.html#using-file
 MODULE_DIR = pathlib.Path(__file__).resolve().parent
@@ -34,9 +27,36 @@ FROZEN = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 # For development
 DEV_DIR = MODULE_DIR.parent.parent / 'temp'
 
+CURRENT_PLATFORM = platform.system()
+ON_WINDOWS = CURRENT_PLATFORM == 'Windows'
+ON_MAC = CURRENT_PLATFORM == 'Darwin'
+
 # App directories
-PROGRAMS_DIR = WIN_PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
-DATA_DIR = WIN_PER_USER_DATA_DIR if FROZEN else DEV_DIR
+if ON_WINDOWS:
+    # Windows per-machine paths
+    WIN_PER_MACHINE_PROGRAMS_DIR = pathlib.Path(os.getenv('ProgramFiles'))
+    WIN_PER_MACHINE_DATA_DIR = pathlib.Path(os.getenv('PROGRAMDATA'))
+
+    # Windows per-user paths
+    WIN_PER_USER_DATA_DIR = pathlib.Path(os.getenv('LOCALAPPDATA'))
+    WIN_PER_USER_PROGRAMS_DIR = WIN_PER_USER_DATA_DIR / 'Programs'
+
+    PROGRAMS_DIR = WIN_PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
+    DATA_DIR = WIN_PER_USER_DATA_DIR if FROZEN else DEV_DIR
+elif ON_MAC:
+    # macOS per-machine paths
+    MAC_PER_MACHINE_PROGRAMS_DIR = pathlib.Path('/Applications')
+    MAC_PER_MACHINE_DATA_DIR = pathlib.Path('/Library')
+
+    # macOS per-user paths
+    MAC_PER_USER_DATA_DIR = pathlib.Path.home() / 'Library'
+    MAC_PER_USER_PROGRAMS_DIR = pathlib.Path.home() / 'Applications'
+
+    PROGRAMS_DIR = MAC_PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
+    DATA_DIR = MAC_PER_USER_DATA_DIR if FROZEN else DEV_DIR
+else:
+    raise NotImplementedError('Unsupported platform')
+
 INSTALL_DIR = PROGRAMS_DIR / APP_NAME
 UPDATE_CACHE_DIR = DATA_DIR / APP_NAME / 'update_cache'
 METADATA_DIR = UPDATE_CACHE_DIR / 'metadata'
