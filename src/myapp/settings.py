@@ -1,8 +1,9 @@
 import logging
 import os
 import pathlib
-import platform
 import sys
+
+from tufup.utils.platform_specific import ON_MAC, ON_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -27,35 +28,26 @@ FROZEN = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 # For development
 DEV_DIR = MODULE_DIR.parent.parent / 'temp'
 
-CURRENT_PLATFORM = platform.system()
-ON_WINDOWS = CURRENT_PLATFORM == 'Windows'
-ON_MAC = CURRENT_PLATFORM == 'Darwin'
-
 # App directories
 if ON_WINDOWS:
-    # Windows per-machine paths
-    WIN_PER_MACHINE_PROGRAMS_DIR = pathlib.Path(os.getenv('ProgramFiles'))
-    WIN_PER_MACHINE_DATA_DIR = pathlib.Path(os.getenv('PROGRAMDATA'))
-
     # Windows per-user paths
-    WIN_PER_USER_DATA_DIR = pathlib.Path(os.getenv('LOCALAPPDATA'))
-    WIN_PER_USER_PROGRAMS_DIR = WIN_PER_USER_DATA_DIR / 'Programs'
-
-    PROGRAMS_DIR = WIN_PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
-    DATA_DIR = WIN_PER_USER_DATA_DIR if FROZEN else DEV_DIR
+    PER_USER_DATA_DIR = pathlib.Path(os.getenv('LOCALAPPDATA'))
+    PER_USER_PROGRAMS_DIR = PER_USER_DATA_DIR / 'Programs'
+    # Windows per-machine paths (only for illustrative purposes):
+    # PER_MACHINE_PROGRAMS_DIR = pathlib.Path(os.getenv('ProgramFiles'))
+    # PER_MACHINE_DATA_DIR = pathlib.Path(os.getenv('PROGRAMDATA'))
 elif ON_MAC:
-    # macOS per-machine paths
-    MAC_PER_MACHINE_PROGRAMS_DIR = pathlib.Path('/Applications')
-    MAC_PER_MACHINE_DATA_DIR = pathlib.Path('/Library')
-
     # macOS per-user paths
-    MAC_PER_USER_DATA_DIR = pathlib.Path.home() / 'Library'
-    MAC_PER_USER_PROGRAMS_DIR = pathlib.Path.home() / 'Applications'
-
-    PROGRAMS_DIR = MAC_PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
-    DATA_DIR = MAC_PER_USER_DATA_DIR if FROZEN else DEV_DIR
+    PER_USER_DATA_DIR = pathlib.Path.home() / 'Library'
+    PER_USER_PROGRAMS_DIR = pathlib.Path.home() / 'Applications'
+    # macOS per-machine paths  (only for illustrative purposes):
+    # PER_MACHINE_PROGRAMS_DIR = pathlib.Path('/Applications')
+    # PER_MACHINE_DATA_DIR = pathlib.Path('/Library')
 else:
     raise NotImplementedError('Unsupported platform')
+
+PROGRAMS_DIR = PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
+DATA_DIR = PER_USER_DATA_DIR if FROZEN else DEV_DIR
 
 INSTALL_DIR = PROGRAMS_DIR / APP_NAME
 UPDATE_CACHE_DIR = DATA_DIR / APP_NAME / 'update_cache'
