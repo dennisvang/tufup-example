@@ -4,7 +4,7 @@ This repository shows how to use the [tufup][1] package for automated applicatio
 
 This is done by means of a dummy Windows-application, called `myapp`, that uses `tufup` in combination with `pyinstaller`. 
 
-NOTE: Although the example application is written for Windows, this only pertains to the directories, defined in `settings.py`, and the batch file used to run PyInstaller.
+NOTE: Although the example application is written for Windows or macOS, this only pertains to the directories, defined in `settings.py`, and the script used to run PyInstaller.
 You can simply adapt these to use the example on other operating systems.
 
 ## Setup
@@ -51,11 +51,11 @@ Here's how to set up the example tufup repository, starting from a clean repo, i
 Note: If you use the CLI, see `repo_settings.py` for sensible values.
 
 1. run `repo_init.py` (CLI: `tufup init`)
-2. run `create_pyinstaller_bundle.bat` or `create_pyinstaller_bundle_mac.sh` (CLI: `tufup build`)
+2. run `create_pyinstaller_bundle_win.bat` or `create_pyinstaller_bundle_mac.sh` (CLI: `tufup build`)
    (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
 3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist/main temp/keystore`)
 4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
-5. run `create_pyinstaller_bundle.bat` again
+5. run the `create_pyinstaller_bundle` script again
 6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp/dist temp/keystore`)
 
 Now we should have a `temp` dir with the following structure:
@@ -93,7 +93,7 @@ On the same system (for convenience):
    `mkdir -p ~/Applications/my_app && tar -xf temp/repository/targets/my_app-1.0.tar.gz -C ~/Applications/my_app`.
 
 2. [optional] To try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
-3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe` / `main`, directly from the `INSTALL_DIR`, and it will perform an update.
+3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe` or `main`, depending on platform, directly from the `INSTALL_DIR`, and it will perform an update.
 4. Metadata and targets are stored in the `UPDATE_CACHE_DIR`.
 
 BEWARE: The steps above refer to the `INSTALL_DIR` for the `FROZEN` state, typically `C:\users\<username>\AppData\Local\Programs\my_app` on Windows.
