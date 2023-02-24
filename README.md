@@ -58,6 +58,9 @@ Note: If you use the CLI, see `repo_settings.py` for sensible values.
 5. run the `create_pyinstaller_bundle` script again
 6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp/dist temp/keystore`)
 
+Note: When adding a bundle, `tufup` creates a patch by default, which can take quite some time.
+If you want to skip patch creation, either set `skip_patch=True` in the `Repository.add_bundle()` call, or add the  `-s` option to the CLI command: `tufup targets add -s 2.0 ...`.
+
 Now we should have a `temp` dir with the following structure:
 
 ```text
