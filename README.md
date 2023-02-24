@@ -51,7 +51,7 @@ Here's how to set up the example tufup repository, starting from a clean repo, i
 Note: If you use the CLI, see `repo_settings.py` for sensible values.
 
 1. run `repo_init.py` (CLI: `tufup init`)
-2. run `create_pyinstaller_bundle_win.bat` or `create_pyinstaller_bundle_mac.sh` (CLI: `tufup build`)
+2. run `create_pyinstaller_bundle_win.bat` or `create_pyinstaller_bundle_mac.sh`
    (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
 3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist/main temp/keystore`)
 4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
