@@ -33,14 +33,22 @@ def update(pre: str):
     )
 
     # Perform update
-    if client.check_for_updates(pre=pre):
+    new_update = client.check_for_updates(pre=pre)
+    if new_update:
+        # At this point, the version info from `new_update` could be used to
+        # present a custom confirmation dialog, asking the user if they wish
+        # to proceed with the download (and installation). However, to keep
+        # the example minimal, we simply rely on the built-in command-line
+        # confirmation in download_and_apply_update().
         client.download_and_apply_update(
-            # WARNING: Be very careful with purge_dst_dir=True, because this
-            # will delete *EVERYTHING* inside the app_install_dir, except
-            # paths specified in exclude_from_purge. So, only use
-            # purge_dst_dir=True if you are certain that your app_install_dir
-            # does not contain any unrelated content.
+            skip_confirmation=False,
             progress_hook=progress_hook,
+            # WARNING: Be very careful with `purge_dst_dir=True`, because
+            # this will *irreversibly* delete *EVERYTHING* inside the
+            # `app_install_dir`, except any paths specified in
+            # `exclude_from_purge`. So, *ONLY* use `purge_dst_dir=True` if
+            # you are absolutely certain that your `app_install_dir` does not
+            # contain any unrelated content.
             purge_dst_dir=False,
             exclude_from_purge=None,
             log_file_name='install.log',
