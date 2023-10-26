@@ -9,6 +9,12 @@ NOTE: Although the example `myapp` is bundled using `pyinstaller`, this is not r
 NOTE: Although the example application is written for Windows (or macOS), this only pertains to the directories, defined in `settings.py`, and the script used to run `pyinstaller`.
 You can simply adapt these to use the example on other operating systems.
 
+## Questions
+
+If you have any questions, please make sure to check the [existing discussions][5] and [existing issues][6] first. (Also check [`tufup` discussions][10] and [`tufup` issues][11].)
+
+New *questions* can be asked in the [Q&A][9] or on [stackoverflow][8], and *bugs* related to `tufup-example` can be reported [here][7].
+
 ## Setup
 
 Create a virtualenv (or equivalent) and install requirements:
@@ -119,3 +125,10 @@ If this is the case, it is often easiest to start from a clean slate for both re
 [2]: https://theupdateframework.io/
 [3]: https://pyinstaller.org/en/stable/
 [4]: https://github.com/dennisvang/tufup-example/blob/2af43175d39417f9d3d855d7e8fb2cb6ebd3c155/src/myapp/settings.py#L38
+[5]: https://github.com/dennisvang/tufup-example/discussions
+[6]: https://github.com/dennisvang/tufup-example/issues?q=is%3Aissue
+[7]: https://github.com/dennisvang/tufup-example/issues/new
+[8]: https://stackoverflow.com/questions/ask
+[9]: https://github.com/dennisvang/tufup-example/discussions/new?category=q-a
+[10]: https://github.com/dennisvang/tufup/discussions
+[11]: https://github.com/dennisvang/tufup/issues
