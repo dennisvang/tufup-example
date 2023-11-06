@@ -35,7 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: add src to python path
       shell: bash
-      run: echo 'export PYTHONPATH=$PYTHONPATH:./src/' >> "$GITHUB_ENV"
+      run: echo 'PYTHONPATH=$PYTHONPATH:./src/' >> "$GITHUB_ENV"
     - shell: bash
       run: echo "$PYTHONPATH"
     - run: $Env:PYTHONPATH
