@@ -34,7 +34,10 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: add src to python path
-      run: echo "set PYTHONPATH=%PYTHONPATH%;.\src\" >> "$GITHUB_ENV"
+      shell: bash
+      run: echo "export PYTHONPATH=$PYTHONPATH:./src/" >> "$GITHUB_ENV"
     - name: initialize tufup repository
-      run: python repo_init.py
-    - run: echo "${{ github.workspace }}"
+      run: |
+        $Env:PYTHONPATH
+        python repo_init.py
+    - run: dir "${{ github.workspace }}\temp"
