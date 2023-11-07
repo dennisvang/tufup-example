@@ -42,11 +42,9 @@ jobs:
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
-        $programs_dir = "$env:LOCALAPPDATA\Programs"
-        $Env:MYAPP_INSTALL_DIR = "$programs_dir\my_app"
+        $Env:MYAPP_INSTALL_DIR = "$env:LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
-        Move-Item -Path ".\temp\dist\main" -Destination $programs_dir
-        Rename-Item -Path "$programs_dir\main" -NewName $Env:MYAPP_INSTALL_DIR
+        Get-ChildItem -Path ".\temp\dist\main" -Recurse | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
     - name: mock develop my_app v2.0
       shell: python
       run: |
