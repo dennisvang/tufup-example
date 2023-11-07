@@ -36,6 +36,8 @@ jobs:
       run: python repo_init.py
     - name: create my_app v1.0 bundle using pyinstaller
       run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
+    - name: add my_app v1.0 to tufup repository
+      run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
         $Env:MYAPP_INSTALL_DIR = ".\my_app"
@@ -49,4 +51,8 @@ jobs:
         settings_path = pathlib.Path('.\src\myapp\settings.py')
         settings_text = settings_path.read_text().replace('1.0', '2.0')
         settings_path.write_text(settings_text)
-    - run: cat .\src\myapp\settings.py
+#    - run: cat .\src\myapp\settings.py
+    - name: create my_app v2.0 bundle using pyinstaller
+      run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
+    - name: add my_app v2.0 to tufup repository
+      run: python repo_add_bundle.py
