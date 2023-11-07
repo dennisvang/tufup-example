@@ -19,7 +19,7 @@ def progress_hook(bytes_downloaded: int, bytes_expected: int):
         print('')
 
 
-def update(pre: str):
+def update(pre: str, skip_confirmation: bool = False):
     # Create update client
     client = Client(
         app_name=settings.APP_NAME,
@@ -41,7 +41,7 @@ def update(pre: str):
         # the example minimal, we simply rely on the built-in command-line
         # confirmation in download_and_apply_update().
         client.download_and_apply_update(
-            skip_confirmation=False,
+            skip_confirmation=skip_confirmation,
             progress_hook=progress_hook,
             # WARNING: Be very careful with `purge_dst_dir=True`, because
             # this will *irreversibly* delete *EVERYTHING* inside the
@@ -56,8 +56,16 @@ def update(pre: str):
 
 
 def main(cmd_args):
-    # extract options from command line args
-    pre_release_channel = cmd_args[0] if cmd_args else None  # 'a', 'b', or 'rc'
+    # a proper app would use argparse, but we just do minimal argument
+    # parsing to keep things simple
+    pre_release_channel = None
+    skip_confirmation = False
+    while cmd_args:
+        arg = cmd_args.pop(0)
+        if arg in ['a', 'b', 'rc']:
+            pre_release_channel = arg
+        else:
+            skip_confirmation = arg == 'skip'
 
     # The app must ensure dirs exist
     for dir_path in [settings.INSTALL_DIR, settings.METADATA_DIR, settings.TARGET_DIR]:
@@ -72,7 +80,7 @@ def main(cmd_args):
         logger.info('Trusted root metadata copied to cache.')
 
     # Download and apply any available updates
-    update(pre=pre_release_channel)
+    update(pre=pre_release_channel, skip_confirmation=skip_confirmation)
 
     # Do what the app is supposed to do
     print(f'Starting {settings.APP_NAME} {settings.APP_VERSION}...')

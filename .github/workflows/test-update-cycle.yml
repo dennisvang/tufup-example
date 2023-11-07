@@ -62,4 +62,4 @@ jobs:
       run: |
         python -m http.server -d .\temp\repository &
         sleep 5
-        & "$Env:MYAPP_INSTALL_DIR\main\main.exe"
+        Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main\main.exe skip"
