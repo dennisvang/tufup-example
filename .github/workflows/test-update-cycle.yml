@@ -56,3 +56,8 @@ jobs:
       run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
     - name: add my_app v2.0 to tufup repository
       run: python repo_add_bundle.py
+    - name: run update server and update my_app from v1 to v2
+      run: |
+        python -m http.server -d .\temp\repository &
+        sleep 5
+        & "$Env.MYAPP_INSTALL_DIR\main\main.exe"
