@@ -36,3 +36,9 @@ jobs:
       run: python repo_init.py
     - name: create my_app v1.0 bundle using pyinstaller
       run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
+    - name: mock install my_app v1.0
+      run: |
+        $Env:MYAPP_INSTALL_DIR = ".\my_app"
+        Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
+        New-Item -Path $Env:MYAPP_INSTALL_DIR -ItemType "directory"
+        Move-Item -Path ".\temp\dist\main" -Destination $Env:MYAPP_INSTALL_DIR
