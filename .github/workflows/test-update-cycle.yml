@@ -42,7 +42,7 @@ jobs:
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
-        $Env:MYAPP_INSTALL_DIR = ".\my_app"
+        $Env:MYAPP_INSTALL_DIR = "$env.LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
         New-Item -Path $Env:MYAPP_INSTALL_DIR -ItemType "directory"
         Move-Item -Path ".\temp\dist\main" -Destination $Env:MYAPP_INSTALL_DIR
@@ -66,7 +66,7 @@ jobs:
     - name: proof of the pudding
       run: |
         $output = Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main\main.exe skip"
-        if ( $output -notmatch "my_app 0.0" )  # TEMP: wrong version, to force error
+        if ( $output -notmatch "my_app 2.0" )
         {
           Write-Output $output
           exit 1
