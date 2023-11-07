@@ -42,3 +42,11 @@ jobs:
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
         New-Item -Path $Env:MYAPP_INSTALL_DIR -ItemType "directory"
         Move-Item -Path ".\temp\dist\main" -Destination $Env:MYAPP_INSTALL_DIR
+    - name: mock develop my_app v2.0
+      shell: python
+      run: |
+        import pathlib
+        settings_path = pathlib.Path('.\src\myapp\settings.py')
+        settings_text = settings_path.read_text().replace('1.0', '2.0')
+        settings_path.write_text(settings_text)
+    - run: cat .\src\myapp\settings.py
