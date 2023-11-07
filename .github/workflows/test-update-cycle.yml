@@ -69,5 +69,6 @@ jobs:
         if ( $output -notmatch "my_app 2.0" )
         {
           Write-Output $output
+          dir
           exit 1
         }
