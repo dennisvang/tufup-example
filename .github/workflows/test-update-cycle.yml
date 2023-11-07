@@ -44,7 +44,8 @@ jobs:
       run: |
         $Env:MYAPP_INSTALL_DIR = "$env:LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
-        Get-ChildItem -Path ".\temp\dist\main" -Recurse | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
+        Get-ChildItem -Path ".\temp\dist\main" -Recurse -Force | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
+        dir $Env:MYAPP_INSTALL_DIR
     - name: mock develop my_app v2.0
       shell: python
       run: |
@@ -68,6 +69,5 @@ jobs:
         if ( $output -notmatch "my_app 2.0" )
         {
           Write-Output $output
-          dir $Env:MYAPP_INSTALL_DIR
           exit 1
         }
