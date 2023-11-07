@@ -8,7 +8,7 @@ from repo_settings import (
 )
 
 logger = logging.getLogger(__name__)
-exit()
+
 """
 
 DISCLAIMER 
