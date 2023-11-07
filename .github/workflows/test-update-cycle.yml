@@ -63,3 +63,11 @@ jobs:
         python -m http.server -d .\temp\repository &
         sleep 5
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main\main.exe skip"
+    - name: proof of the pudding
+      run: |
+        $output = Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main\main.exe skip"
+        if ( $output -notmatch "my_app 0.0" )  # TEMP: wrong version, to force error
+        {
+          Write-Output $output
+          exit 1
+        }
