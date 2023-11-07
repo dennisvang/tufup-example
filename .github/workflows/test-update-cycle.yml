@@ -38,4 +38,5 @@ jobs:
     - run: $Env:PYTHONPATH
     - name: initialize tufup repository
       run: python repo_init.py
-    - run: dir "${{ github.workspace }}\temp"
+    - name: create app v1.0 bundle using pyinstaller
+      run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
