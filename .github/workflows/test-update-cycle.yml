@@ -60,4 +60,4 @@ jobs:
       run: |
         python -m http.server -d .\temp\repository &
         sleep 5
-        & "$Env.MYAPP_INSTALL_DIR\main\main.exe"
+        & "$Env:MYAPP_INSTALL_DIR\main\main.exe"
