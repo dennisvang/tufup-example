@@ -29,6 +29,8 @@ jobs:
         pip install -r requirements.txt --upgrade
     - name: lint with ruff
       run: ruff --output-format=github .
+    - name: identify powershell version
+      run: $PSVersionTable  # or $PSVersionTable.PSEdition
     - name: add src to python path
       run: Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH;.\src"
     - run: $Env:PYTHONPATH
