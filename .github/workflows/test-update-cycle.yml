@@ -42,7 +42,7 @@ jobs:
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
-        $Env:MYAPP_INSTALL_DIR = "$env:LOCALAPPDATA\Programs\my_app"
+        $Env:MYAPP_INSTALL_DIR = ".\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
         Get-ChildItem -Path ".\temp\dist\main" -Recurse -Force | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
         dir $Env:MYAPP_INSTALL_DIR
@@ -62,6 +62,7 @@ jobs:
       run: |
         python -m http.server -d .\temp\repository &
         sleep 5
+        $Env:PROGRAMS_DIR = "."
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
     - name: proof of the pudding
       run: |
