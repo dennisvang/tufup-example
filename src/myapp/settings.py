@@ -46,10 +46,7 @@ elif ON_MAC:
 else:
     raise NotImplementedError('Unsupported platform')
 
-PROGRAMS_DIR = os.getenv(
-    'PROGRAMS_DIR',
-    PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR,
-)
+PROGRAMS_DIR = PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
 DATA_DIR = PER_USER_DATA_DIR if FROZEN else DEV_DIR
 
 INSTALL_DIR = PROGRAMS_DIR / APP_NAME
