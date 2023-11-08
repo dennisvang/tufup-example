@@ -42,11 +42,11 @@ jobs:
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
-        $archive_v1 = ".\temp\repository\targets\my_app-1.0.tar.gz"
+        $myapp_v1_archive = ".\temp\repository\targets\my_app-1.0.tar.gz"
         $myapp_install_dir = "$env:LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$myapp_install_dir"
         New-Item -Path $myapp_install_dir -ItemType "directory"
-        tar -xf $archive_v1 --directory=$myapp_install_dir
+        tar -xf $myapp_v1_archive --directory=$myapp_install_dir
         dir $myapp_install_dir
     - name: mock develop my_app v2.0
       shell: python
