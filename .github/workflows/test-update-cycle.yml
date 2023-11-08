@@ -65,11 +65,15 @@ jobs:
         python -m http.server -d .\temp\repository &
         sleep 5
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
-    - name: proof of the pudding
+    - name: proof of the pudding (i.e. verify that install dir contains my_app v2.0)
       run: |
+        python -m http.server -d .\temp\repository &
+        sleep 5
         $output = Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
-        if ( $output -notmatch "my_app 2.0" )
-        {
-          Write-Output $output
+        $pattern = "my_app 2.0"
+        if ( $output -match $pattern ) {
+          Write-Output "success: $pattern found"
+        } else {
+          Write-Output "fail: $pattern not found in:`n$output"
           exit 1
         }
