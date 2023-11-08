@@ -4,7 +4,12 @@ from tufup.repo import Repository
 
 from myapp.settings import APP_NAME
 from repo_settings import (
-    ENCRYPTED_KEYS, EXPIRATION_DAYS, KEY_MAP, KEYS_DIR, REPO_DIR, THRESHOLDS
+    ENCRYPTED_KEYS,
+    EXPIRATION_DAYS,
+    KEY_MAP,
+    KEYS_DIR,
+    REPO_DIR,
+    THRESHOLDS,
 )
 
 logger = logging.getLogger(__name__)

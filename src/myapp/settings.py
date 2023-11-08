@@ -46,7 +46,10 @@ elif ON_MAC:
 else:
     raise NotImplementedError('Unsupported platform')
 
-PROGRAMS_DIR = PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR
+PROGRAMS_DIR = os.getenv(
+    'PROGRAMS_DIR',
+    PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR,
+)
 DATA_DIR = PER_USER_DATA_DIR if FROZEN else DEV_DIR
 
 INSTALL_DIR = PROGRAMS_DIR / APP_NAME
@@ -64,5 +67,6 @@ if not FROZEN:
     # for development, get the root metadata directly from local repo
     sys.path.insert(0, str(MODULE_DIR.parent.parent))
     from repo_settings import REPO_DIR
-    TRUSTED_ROOT_SRC =  REPO_DIR / 'metadata' / 'root.json'
+
+    TRUSTED_ROOT_SRC = REPO_DIR / 'metadata' / 'root.json'
 TRUSTED_ROOT_DST = METADATA_DIR / 'root.json'

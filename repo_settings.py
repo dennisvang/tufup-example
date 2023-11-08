@@ -1,9 +1,7 @@
 import logging
 import pathlib
 
-from tufup.repo import (
-    DEFAULT_KEY_MAP, DEFAULT_KEYS_DIR_NAME, DEFAULT_REPO_DIR_NAME
-)
+from tufup.repo import DEFAULT_KEY_MAP, DEFAULT_KEYS_DIR_NAME, DEFAULT_REPO_DIR_NAME
 
 logger = logging.getLogger(__name__)
 
