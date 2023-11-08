@@ -40,14 +40,14 @@ jobs:
       run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
     - name: add my_app v1.0 to tufup repository
       run: python repo_add_bundle.py
-    - name: debug
-      run: dir .\temp\repository\targets
     - name: mock install my_app v1.0
       run: |
-        $Env:MYAPP_INSTALL_DIR = "$env:LOCALAPPDATA\Programs\my_app"
-        Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
-        Get-ChildItem -Path ".\temp\dist\main" -Recurse -Force | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
-        dir $Env:MYAPP_INSTALL_DIR
+        $archive_v1 = ".\temp\repository\targets\my_app-1.0.tar.gz"
+        $myapp_install_dir = "$env:LOCALAPPDATA\Programs\my_app"
+        Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$myapp_install_dir"
+        New-Item -Path $myapp_install_dir -ItemType "directory"
+        tar -xf $archive_v1 --directory=$myapp_install_dir
+        dir $myapp_install_dir
     - name: mock develop my_app v2.0
       shell: python
       run: |
