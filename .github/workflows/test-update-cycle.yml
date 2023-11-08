@@ -40,9 +40,11 @@ jobs:
       run: cmd.exe /c .\create_pyinstaller_bundle_win.bat
     - name: add my_app v1.0 to tufup repository
       run: python repo_add_bundle.py
+    - name: debug
+      run: dir .\temp\repository\targets
     - name: mock install my_app v1.0
       run: |
-        $Env:MYAPP_INSTALL_DIR = ".\my_app"
+        $Env:MYAPP_INSTALL_DIR = "$env:LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$Env:MYAPP_INSTALL_DIR"
         Get-ChildItem -Path ".\temp\dist\main" -Recurse -Force | Move-Item -Destination $Env:MYAPP_INSTALL_DIR
         dir $Env:MYAPP_INSTALL_DIR
@@ -62,7 +64,6 @@ jobs:
       run: |
         python -m http.server -d .\temp\repository &
         sleep 5
-        $Env:PROGRAMS_DIR = "."
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
     - name: proof of the pudding
       run: |
