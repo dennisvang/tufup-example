@@ -26,7 +26,7 @@ MODULE_DIR = pathlib.Path(__file__).resolve().parent
 FROZEN = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 
 # For development
-DEV_DIR = MODULE_DIR.parent.parent / 'temp'
+DEV_DIR = MODULE_DIR.parent.parent / f'temp_{APP_NAME}'
 
 # App directories
 if ON_WINDOWS:

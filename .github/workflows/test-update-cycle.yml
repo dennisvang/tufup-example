@@ -43,7 +43,7 @@ jobs:
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
       run: |
-        $myapp_v1_archive = ".\temp\repository\targets\my_app-1.0.tar.gz"
+        $myapp_v1_archive = ".\temp_my_app\repository\targets\my_app-1.0.tar.gz"
         $myapp_install_dir = "$env:LOCALAPPDATA\Programs\my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$myapp_install_dir"
         New-Item -Path $myapp_install_dir -ItemType "directory"
@@ -63,12 +63,12 @@ jobs:
       run: python repo_add_bundle.py
     - name: run update server and update my_app from v1 to v2
       run: |
-        python -m http.server -d .\temp\repository &
+        python -m http.server -d .\temp_my_app\repository &
         sleep 5
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
     - name: proof of the pudding (i.e. verify that install dir contains my_app v2.0)
       run: |
-        python -m http.server -d .\temp\repository &
+        python -m http.server -d .\temp_my_app\repository &
         sleep 5
         $output = Invoke-Expression "$Env:MYAPP_INSTALL_DIR\main.exe skip"
         $pattern = "my_app 2.0"

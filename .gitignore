@@ -1,7 +1,7 @@
 # __pycache__/ in global core.excludesFile or in .git/info/exclude
 
 # directories
-temp/
+temp_my_app/
 build/
 dist/
 

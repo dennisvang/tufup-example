@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-pyinstaller main.spec --clean -y --distpath temp/dist --workpath temp/build
+pyinstaller main.spec --clean -y --distpath temp_my_app/dist --workpath temp_my_app/build
