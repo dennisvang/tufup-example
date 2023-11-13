@@ -47,6 +47,10 @@ The following basic steps are covered:
 4. serve the repository on a local test server
 5. run the "installed" application, so it can perform an automatic update
 
+> For quick testing, these steps have been automated in the [PowerShell][12] script [`test_update_cycle.ps1`][13].
+
+A detailed description of the steps, both for the repository-side and for the client-side, can be found in the following sections.
+
 ### Repo side
 
 Some example scripts are provided for initializing a tufup repository and for adding new versions, see `repo_*.py`.
@@ -121,6 +125,8 @@ If this is the case, it is often easiest to start from a clean slate for both re
 3. remove `.tufup_repo_config`
 4. follow the steps above to set up the repo-side and client-side
 
+Alternatively, you could run the `test_update_cycle.ps1` script, which also removes stale example files from the default directories.
+
 [1]: https://github.com/dennisvang/tufup
 [2]: https://theupdateframework.io/
 [3]: https://pyinstaller.org/en/stable/
@@ -132,3 +138,5 @@ If this is the case, it is often easiest to start from a clean slate for both re
 [9]: https://github.com/dennisvang/tufup-example/discussions/new?category=q-a
 [10]: https://github.com/dennisvang/tufup/discussions
 [11]: https://github.com/dennisvang/tufup/issues
+[12]: https://learn.microsoft.com/en-ca/powershell/scripting/install/installing-powershell
+[13]: ./test_update_cycle.ps1
