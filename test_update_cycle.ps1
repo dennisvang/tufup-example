@@ -157,7 +157,7 @@ $all_app_dirs | ForEach-Object {
 }
 if ($remaining) {
     Write-Host "Would you like to remove these directories?" -ForegroundColor yellow
-    if (!(Read-Host "[y]/n")) {
+    if ((Read-Host "[y]/n") -in "", "y") {
         Remove-MyApp
     }
 }
