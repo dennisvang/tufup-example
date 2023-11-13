@@ -53,7 +53,7 @@ function Remove-MyApp {
     $all_app_dirs | ForEach-Object { Remove-MyAppDirectory $_ }
 }
 
-# Remove leftover files, if any
+# remove leftover directories and files, if any
 Remove-MyApp
 
 # create directories if they do not exist yet
@@ -64,8 +64,8 @@ $all_app_dirs | ForEach-Object {
     }
 }
 
-# this script requires an active python environment with tufup installed
-# we'll assume there's a venv in the repo_dir
+# this script requires an active python environment, with tufup installed
+# (we'll assume there's a venv in the repo_dir)
 $venv_path = "$repo_dir\venv\Scripts\activate.ps1"
 if (Test-Path $venv_path) {
     & $venv_path
@@ -147,7 +147,7 @@ if ( $output -match $pattern ) {
   exit 1
 }
 
-# reminder
+# reminder to clean up
 $remaining = 0
 $all_app_dirs | ForEach-Object {
     if (Test-Path $_) {
