@@ -54,25 +54,25 @@ Some example scripts are provided for initializing a tufup repository and for ad
 Alternatively, `tufup` offers a command line interface (CLI) for repository actions. 
 Type `tufup -h` on the command line for more information. 
 
-Here's how to set up the example tufup repository, starting from a clean repo, i.e. no `temp` dir is present in the repo root (as defined by `DEV_DIR` in `settings.py`):
+Here's how to set up the example tufup repository, starting from a clean repo, i.e. no `temp_my_app` dir is present in the repo root (as defined by `DEV_DIR` in `settings.py`):
 
 Note: If you use the CLI, see `repo_settings.py` for sensible values.
 
 1. run `repo_init.py` (CLI: `tufup init`)
 2. run `create_pyinstaller_bundle_win.bat` or `create_pyinstaller_bundle_mac.sh`
    (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
-3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp/dist/main temp/keystore`)
+3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp_my_app/dist/main temp_my_app/keystore`)
 4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
 5. run the `create_pyinstaller_bundle` script again
-6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp/dist temp/keystore`)
+6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp_my_app/dist temp_my_app/keystore`)
 
 Note: When adding a bundle, `tufup` creates a patch by default, which can take quite some time.
 If you want to skip patch creation, either set `skip_patch=True` in the `Repository.add_bundle()` call, or add the  `-s` option to the CLI command: `tufup targets add -s 2.0 ...`.
 
-Now we should have a `temp` dir with the following structure:
+Now we should have a `temp_my_app` dir with the following structure:
 
 ```text
-temp
+temp_my_app
 ├ build
 ├ dist
 ├ keystore
@@ -85,7 +85,7 @@ In the `targets` dir we find two app archives (1.0 and 2.0) and a corresponding 
 
 We can serve the repository on localhost as follows (relative to project root):
 
-    python -m http.server -d temp/repository
+    python -m http.server -d temp_my_app/repository
 
 That's it for the repo-side.
 
@@ -101,7 +101,7 @@ On the same system (for convenience):
 
    #### On macOS:
    To install the bundle on macOS to the default location, you can use 
-   `mkdir -p ~/Applications/my_app && tar -xf temp/repository/targets/my_app-1.0.tar.gz -C ~/Applications/my_app`.
+   `mkdir -p ~/Applications/my_app && tar -xf temp_my_app/repository/targets/my_app-1.0.tar.gz -C ~/Applications/my_app`.
 
 2. [optional] To try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
 3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe` or `main`, depending on platform, directly from the `INSTALL_DIR`, and it will perform an update.
@@ -117,7 +117,7 @@ This may result in tuf role verification errors, for example.
 If this is the case, it is often easiest to start from a clean slate for both repo and client:
 
 1. for the client-side, remove `UPDATE_CACHE_DIR` and `INSTALL_DIR`
-2. for the repo-side, remove `DEV_DIR` (i.e. the `temp` dir described above)
+2. for the repo-side, remove `DEV_DIR` (i.e. the `temp_my_app` dir described above)
 3. remove `.tufup_repo_config`
 4. follow the steps above to set up the repo-side and client-side
 

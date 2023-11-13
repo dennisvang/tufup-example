@@ -19,7 +19,7 @@ safe and should *not* be used in production.
 MODULE_DIR = pathlib.Path(__file__).resolve().parent
 
 # For development
-DEV_DIR = MODULE_DIR / 'temp'
+DEV_DIR = MODULE_DIR / 'temp_my_app'
 PYINSTALLER_DIST_DIR_NAME = 'dist'
 DIST_DIR = DEV_DIR / PYINSTALLER_DIST_DIR_NAME
 
