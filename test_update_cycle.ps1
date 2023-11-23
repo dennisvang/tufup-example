@@ -24,6 +24,18 @@
 # but workflow failures are easier to debug when broken down into
 # separate steps
 
+# exit on cmdlet errors
+$ErrorActionPreference = "stop"
+
+# exit on executable errors (for use directly after executable call)
+function Assert-ExeSucces {
+    if (!$?) {
+        # note $? contains the execution status of the last command (true if successful)
+        Write-Error "failed"
+    }
+}
+
+# variables
 $app_name = "my_app"
 $enable_patch_update = $true
 
@@ -81,20 +93,23 @@ if (Test-Path $venv_path) {
 $Env:PYTHONPATH += ";$repo_dir\src"
 
 # - initialize new repository
-Write-Host "initializing tuf repository for myapp" -ForegroundColor green
+Write-Host "initializing tuf repository for $app_name" -ForegroundColor green
 python "$repo_dir\repo_init.py"
+Assert-ExeSucces
 
 # - create my_app v1.0 bundle using pyinstaller
-Write-Host "creating myapp v1.0 bundle" -ForegroundColor green
+Write-Host "creating $app_name v1.0 bundle" -ForegroundColor green
 Push-Location $repo_dir
 & "$repo_dir\create_pyinstaller_bundle_win.bat"
 Pop-Location
 
 # - add my_app v1.0 to tufup repository
-Write-Host "adding myapp v1.0 bundle to repo" -ForegroundColor green
+Write-Host "adding $app_name v1.0 bundle to repo" -ForegroundColor green
 python "$repo_dir\repo_add_bundle.py"
+Assert-ExeSucces
 
 # - mock install my_app v1.0
+Write-Host "installing $app_name v1.0 in $app_install_dir" -ForegroundColor green
 $myapp_v1_archive = "$temp_dir\repository\targets\$app_name-1.0.tar.gz"
 tar -xf $myapp_v1_archive --directory=$app_install_dir
 # put a copy of the archive in the targets dir, to enable patch updates
@@ -106,21 +121,23 @@ if ($enable_patch_update) {
 # - mock develop my_app v2.0
 # (quick and dirty, this modifies the actual source,
 # but the change is rolled back later...)
-Write-Host "bumping myapp version to v2.0" -ForegroundColor green
+Write-Host "bumping $app_name version to v2.0 (temporary)" -ForegroundColor green
 $settings_path = "$repo_dir\src\myapp\settings.py"
 (Get-Content $settings_path).Replace("1.0", "2.0") | Set-Content $settings_path
 
 # - create my_app v2.0 bundle using pyinstaller
-Write-Host "creating myapp v2.0 bundle" -ForegroundColor green
+Write-Host "creating $app_name v2.0 bundle" -ForegroundColor green
 Push-Location $repo_dir
 & "$repo_dir\create_pyinstaller_bundle_win.bat"
 Pop-Location
 
 # - add my_app v2.0 to tufup repository
-Write-Host "adding myapp v2.0 bundle to repo" -ForegroundColor green
+Write-Host "adding $app_name v2.0 bundle to repo" -ForegroundColor green
 python "$repo_dir\repo_add_bundle.py"
+Assert-ExeSucces
 
 # - roll-back modified source
+Write-Host "rolling back temporary source modification" -ForegroundColor green
 (Get-Content $settings_path).Replace("2.0", "1.0") | Set-Content $settings_path
 
 # - start update server
@@ -128,18 +145,21 @@ Write-Host "starting update server" -ForegroundColor green
 $job = Start-Job -ArgumentList @("$temp_dir\repository") -ScriptBlock {
     param($repository_path)
     python -m http.server -d $repository_path
+    Assert-ExeSucces
 }
 sleep 1  # not sure if this is required, but cannot hurt
 
 # - run my_app to update from v1 to v2
 Write-Host "running $app_name for update..." -ForegroundColor green
 Invoke-Expression "$app_install_dir\main.exe"
+Assert-ExeSucces
 
 # - run my_app again to verify we now have v2.0
 Write-Host "hit enter to proceed, after console has closed:"  -ForegroundColor yellow -NoNewLine
 Read-Host  # no text: we use write host to add color
 Write-Host "running $app_name again to verify version" -ForegroundColor green
 $output = Invoke-Expression "$app_install_dir\main.exe"
+Assert-ExeSucces
 
 # - stop update server
 Write-Host "stopping server" -ForegroundColor green
