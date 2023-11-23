@@ -25,6 +25,7 @@
 # separate steps
 
 $app_name = "my_app"
+$enable_patch_update = $true
 
 # directories where this script creates files and deletes files (note these must end
 # with $app_name and must be consistent with myapp.settings and repo_settings)
@@ -32,6 +33,7 @@ $repo_dir = $PSScriptRoot
 $temp_dir = "$repo_dir\temp_$app_name"
 $app_install_dir = "$env:LOCALAPPDATA\Programs\$app_name"
 $app_data_dir = "$env:LOCALAPPDATA\$app_name"
+$targets_dir = "$app_data_dir\update_cache\targets"
 $all_app_dirs = @($temp_dir, $app_install_dir, $app_data_dir)
 
 function Remove-MyAppDirectory {
@@ -63,6 +65,7 @@ $all_app_dirs | ForEach-Object {
         Write-Host "directory created: $_" -ForegroundColor green
     }
 }
+New-Item -Path $targets_dir -ItemType "directory" -Force | Out-Null
 
 # this script requires an active python environment, with tufup installed
 # (we'll assume there's a venv in the repo_dir)
@@ -94,7 +97,11 @@ python "$repo_dir\repo_add_bundle.py"
 # - mock install my_app v1.0
 $myapp_v1_archive = "$temp_dir\repository\targets\$app_name-1.0.tar.gz"
 tar -xf $myapp_v1_archive --directory=$app_install_dir
-Write-Host "$app_name v1.0 installed in $app_install_dir" -ForegroundColor green
+# put a copy of the archive in the targets dir, to enable patch updates
+if ($enable_patch_update) {
+    Write-Host "enabling patch update" -ForegroundColor green
+    Copy-Item $myapp_v1_archive -Destination $targets_dir
+}
 
 # - mock develop my_app v2.0
 # (quick and dirty, this modifies the actual source,
