@@ -45,10 +45,16 @@ jobs:
       run: |
         $myapp_v1_archive = ".\temp_my_app\repository\targets\my_app-1.0.tar.gz"
         $myapp_install_dir = "$env:LOCALAPPDATA\Programs\my_app"
+        $myapp_targets_dir = "$env:LOCALAPPDATA\my_app\update_cache\targets"
+        # make install dir accessible as environment variable in subsequent steps
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$myapp_install_dir"
+        # create install dir and extract archive into it
         New-Item -Path $myapp_install_dir -ItemType "directory"
         tar -xf $myapp_v1_archive --directory=$myapp_install_dir
         dir $myapp_install_dir
+        # create targets dir and copy the archive into it (this enables patch updates)
+        New-Item -Path $myapp_targets_dir -ItemType "directory" -Force
+        Copy-Item $myapp_v1_archive -Destination $myapp_targets_dir
     - name: mock develop my_app v2.0
       shell: python
       run: |
