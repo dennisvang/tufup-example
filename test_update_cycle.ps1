@@ -28,7 +28,7 @@
 $ErrorActionPreference = "stop"
 
 # exit on executable errors (for use directly after executable call)
-function Assert-ExeSucces {
+function Assert-ExeSuccess {
     if (!$?) {
         # note $? contains the execution status of the last command (true if successful)
         Write-Error "failed"
@@ -95,7 +95,7 @@ $Env:PYTHONPATH += ";$repo_dir\src"
 # - initialize new repository
 Write-Host "initializing tuf repository for $app_name" -ForegroundColor green
 python "$repo_dir\repo_init.py"
-Assert-ExeSucces
+Assert-ExeSuccess
 
 # - create my_app v1.0 bundle using pyinstaller
 Write-Host "creating $app_name v1.0 bundle" -ForegroundColor green
@@ -106,7 +106,7 @@ Pop-Location
 # - add my_app v1.0 to tufup repository
 Write-Host "adding $app_name v1.0 bundle to repo" -ForegroundColor green
 python "$repo_dir\repo_add_bundle.py"
-Assert-ExeSucces
+Assert-ExeSuccess
 
 # - mock install my_app v1.0
 Write-Host "installing $app_name v1.0 in $app_install_dir" -ForegroundColor green
@@ -134,7 +134,7 @@ Pop-Location
 # - add my_app v2.0 to tufup repository
 Write-Host "adding $app_name v2.0 bundle to repo" -ForegroundColor green
 python "$repo_dir\repo_add_bundle.py"
-Assert-ExeSucces
+Assert-ExeSuccess
 
 # - roll-back modified source
 Write-Host "rolling back temporary source modification" -ForegroundColor green
@@ -145,21 +145,21 @@ Write-Host "starting update server" -ForegroundColor green
 $job = Start-Job -ArgumentList @("$temp_dir\repository") -ScriptBlock {
     param($repository_path)
     python -m http.server -d $repository_path
-    Assert-ExeSucces
+    Assert-ExeSuccess
 }
 sleep 1  # not sure if this is required, but cannot hurt
 
 # - run my_app to update from v1 to v2
 Write-Host "running $app_name for update..." -ForegroundColor green
 Invoke-Expression "$app_install_dir\main.exe"
-Assert-ExeSucces
+Assert-ExeSuccess
 
 # - run my_app again to verify we now have v2.0
 Write-Host "hit enter to proceed, after console has closed:"  -ForegroundColor yellow -NoNewLine
 Read-Host  # no text: we use write host to add color
 Write-Host "running $app_name again to verify version" -ForegroundColor green
 $output = Invoke-Expression "$app_install_dir\main.exe"
-Assert-ExeSucces
+Assert-ExeSuccess
 
 # - stop update server
 Write-Host "stopping server" -ForegroundColor green
