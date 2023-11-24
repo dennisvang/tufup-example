@@ -67,6 +67,11 @@ function Remove-MyApp {
     $all_app_dirs | ForEach-Object { Remove-MyAppDirectory $_ }
 }
 
+function Invoke-PyInstaller {
+    pyinstaller.exe "$repo_dir\main.spec" --clean -y --distpath "$temp_dir\dist" --workpath "$temp_dir\build"
+    Assert-ExeSuccess
+}
+
 # remove leftover directories and files, if any
 Remove-MyApp
 
@@ -99,9 +104,7 @@ Assert-ExeSuccess
 
 # - create my_app v1.0 bundle using pyinstaller
 Write-Host "creating $app_name v1.0 bundle" -ForegroundColor green
-Push-Location $repo_dir
-& "$repo_dir\create_pyinstaller_bundle_win.bat"
-Pop-Location
+Invoke-PyInstaller
 
 # - add my_app v1.0 to tufup repository
 Write-Host "adding $app_name v1.0 bundle to repo" -ForegroundColor green
@@ -127,9 +130,7 @@ $settings_path = "$repo_dir\src\myapp\settings.py"
 
 # - create my_app v2.0 bundle using pyinstaller
 Write-Host "creating $app_name v2.0 bundle" -ForegroundColor green
-Push-Location $repo_dir
-& "$repo_dir\create_pyinstaller_bundle_win.bat"
-Pop-Location
+Invoke-PyInstaller
 
 # - add my_app v2.0 to tufup repository
 Write-Host "adding $app_name v2.0 bundle to repo" -ForegroundColor green
