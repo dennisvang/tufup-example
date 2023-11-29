@@ -52,7 +52,7 @@ jobs:
     - name: initialize tufup repository
       run: python repo_init.py
     - name: create my_app v1.0 bundle using pyinstaller
-      run: cmd.exe /c ./create_pyinstaller_bundle_win.bat
+      run: pyinstaller "main.spec" --clean -y --distpath "${{ runner.temp }}/dist" --workpath "${{ runner.temp }}/build"
     - name: add my_app v1.0 to tufup repository
       run: python repo_add_bundle.py
     - name: mock install my_app v1.0
@@ -78,7 +78,7 @@ jobs:
         settings_path.write_text(settings_text)
 #    - run: cat ./src/myapp/settings.py
     - name: create my_app v2.0 bundle using pyinstaller
-      run: cmd.exe /c ./create_pyinstaller_bundle_win.bat
+      run: pyinstaller "main.spec" --clean -y --distpath "${{ runner.temp }}/dist" --workpath "${{ runner.temp }}/build"
     - name: add my_app v2.0 to tufup repository
       run: python repo_add_bundle.py
     - name: run update server and update my_app from v1 to v2
