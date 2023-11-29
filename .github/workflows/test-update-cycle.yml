@@ -79,11 +79,11 @@ jobs:
         settings_path = pathlib.Path('./src/myapp/settings.py')
         settings_text = settings_path.read_text().replace('1.0', '2.0')
         settings_path.write_text(settings_text)
-#    - run: cat ./src/myapp/settings.py
     - name: create my_app v2.0 bundle using pyinstaller
       run: pyinstaller "main.spec" --clean -y --distpath "temp_my_app/dist" --workpath "temp_my_app/build"
     - name: add my_app v2.0 to tufup repository
       run: python repo_add_bundle.py
+    - run: dir $Env:MYAPP_INSTALL_DIR  # TEMP
     - name: run update server and update my_app from v1 to v2
       run: |
         python -m http.server -d ./temp_my_app/repository &
