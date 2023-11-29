@@ -83,12 +83,12 @@ jobs:
       run: pyinstaller "main.spec" --clean -y --distpath "temp_my_app/dist" --workpath "temp_my_app/build"
     - name: add my_app v2.0 to tufup repository
       run: python repo_add_bundle.py
-    - run: dir $Env:MYAPP_INSTALL_DIR  # TEMP
+    - run: Get-ChildItem -Force -LiteralPath $Env:MYAPP_INSTALL_DIR  # TEMP
     - name: run update server and update my_app from v1 to v2
       run: |
         python -m http.server -d ./temp_my_app/repository &
         sleep 5
-        Invoke-Expression "$Env:MYAPP_INSTALL_DIR/main.exe skip"
+        Invoke-Expression "$Env:MYAPP_INSTALL_DIR/main skip"
     - name: proof of the pudding (i.e. verify that install dir contains my_app v2.0)
       run: |
         python -m http.server -d ./temp_my_app/repository &
