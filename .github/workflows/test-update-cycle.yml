@@ -46,15 +46,16 @@ jobs:
         # make directories accessible as environment variables in subsequent steps
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$env:LOCALAPPDATA/Programs/my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_TARGETS_DIR=$env:LOCALAPPDATA/my_app/update_cache/targets"
+        # add src directory to python path
+        Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH;./src"
     - name: specify app directories for macOS
       if: runner.os == 'macOS'
       run: |
         # make directories accessible as environment variables in subsequent steps
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$HOME/Applications/my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_TARGETS_DIR=$HOME/Library/my_app/update_cache/targets"
-    - name: add src to python path
-      run: Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH;./src"
-    - run: $Env:PYTHONPATH
+        # add src directory to python path
+        Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH:src"
     - name: initialize tufup repository
       run: python repo_init.py
     - name: create my_app v1.0 bundle using pyinstaller
