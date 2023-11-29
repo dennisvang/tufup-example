@@ -55,7 +55,7 @@ jobs:
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_INSTALL_DIR=$HOME/Applications/my_app"
         Add-Content -Path $Env:GITHUB_ENV -Value "MYAPP_TARGETS_DIR=$HOME/Library/my_app/update_cache/targets"
         # add src directory to python path
-        Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH:src"
+        Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH:./src"
     - name: initialize tufup repository
       run: python repo_init.py
     - name: create my_app v1.0 bundle using pyinstaller
