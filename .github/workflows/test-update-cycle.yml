@@ -41,10 +41,10 @@ jobs:
       run: $PSVersionTable  # or $PSVersionTable.PSEdition
       # https://docs.github.com/en/actions/learn-github-actions/contexts#runner-context
     - name: specify app directories for Windows
-      if: runner.os == Windows
+      if: ${{ runner.os == "Windows" }}
       run: echo "Windows"  # TEMP
     - name: specify app directories for macOS
-      if: runner.os == macOS
+      if: ${{ runner.os == "macOS" }}
       run: echo "macOS"  # TEMP
     - name: add src to python path
       run: Add-Content -Path $Env:GITHUB_ENV -Value "PYTHONPATH=$Env:PYTHONPATH;.\src"
