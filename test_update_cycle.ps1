@@ -152,14 +152,14 @@ sleep 1  # not sure if this is required, but cannot hurt
 
 # - run my_app to update from v1 to v2
 Write-Host "running $app_name for update..." -ForegroundColor green
-Invoke-Expression "$app_install_dir\main.exe"
+& "$app_install_dir\main.exe"
 Assert-ExeSuccess
 
 # - run my_app again to verify we now have v2.0
 Write-Host "hit enter to proceed, after console has closed:"  -ForegroundColor yellow -NoNewLine
 Read-Host  # no text: we use write host to add color
 Write-Host "running $app_name again to verify version" -ForegroundColor green
-$output = Invoke-Expression "$app_install_dir\main.exe"
+$output = & "$app_install_dir\main.exe"
 Assert-ExeSuccess
 
 # - stop update server
