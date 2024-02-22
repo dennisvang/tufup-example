@@ -35,11 +35,13 @@ def update(pre: str, skip_confirmation: bool = False):
     # Perform update
     new_update = client.check_for_updates(pre=pre)
     if new_update:
-        # At this point, the version info from `new_update` could be used to
-        # present a custom confirmation dialog, asking the user if they wish
-        # to proceed with the download (and installation). However, to keep
-        # the example minimal, we simply rely on the built-in command-line
-        # confirmation in download_and_apply_update().
+        # [optional] use custom metadata, if available
+        if new_update.custom:
+            # for example, show list of changes (see repo_add_bundle.py for definition)
+            print('changes in this update:')
+            for item in new_update.custom.get('changes', []):
+                print(f'\t- {item}')
+        # apply the update
         client.download_and_apply_update(
             skip_confirmation=skip_confirmation,
             progress_hook=progress_hook,

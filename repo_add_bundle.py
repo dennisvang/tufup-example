@@ -25,7 +25,11 @@ if __name__ == '__main__':
     repo = Repository.from_config()
 
     # Add new app bundle to repository (automatically reads myapp.__version__)
-    repo.add_bundle(new_bundle_dir=bundle_dir)
+    repo.add_bundle(
+        new_bundle_dir=bundle_dir,
+        # [optional] custom metadata can be any dict (default is None)
+        custom_metadata={'changes': ['new feature x added', 'bug y fixed']},
+    )
     repo.publish_changes(private_key_dirs=[KEYS_DIR])
 
     print('Done.')
