@@ -86,7 +86,8 @@ def main(cmd_args):
 
     # Do what the app is supposed to do
     print(f'Starting {settings.APP_NAME} {settings.APP_VERSION}...')
-    ...
     print('Doing what the app is supposed to do...')
-    ...
     print('Done.')
+    
+    # Wait for user input before closing
+    input("\nPress Enter to exit...")

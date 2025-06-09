@@ -2,11 +2,11 @@
 
 This repository shows how to use the [tufup][1] package for automated application updates.
 
-This is done by means of a dummy Windows-application, called `myapp`, that uses `tufup` in combination with `pyinstaller`. 
+This is done by means of a dummy Windows-application, called `myapp`, that uses `tufup` in combination with `cx_Freeze`. 
 
-NOTE: Although the example `myapp` is bundled using `pyinstaller`, this is not required: `tufup` is completely independent of `pyinstaller`, and can be used with *any* bundle of files.
+Note: Although the example `myapp` is bundled using `cx_Freeze`, this is not required: `tufup` is completely independent of `cx_Freeze`, and can be used with *any* bundle of files.
 
-NOTE: Although the example application is written for Windows (or macOS), this only pertains to the directories, defined in `settings.py`, and the script used to run `pyinstaller`.
+Note: Although the example application is written for Windows (or macOS), this only pertains to the directories, defined in `settings.py`, and the script used to run `cx_Freeze`.
 You can simply adapt these to use the example on other operating systems.
 
 ## Questions
@@ -21,6 +21,8 @@ Create a virtualenv (or equivalent) and install requirements:
 
 `pip install -r requirements.txt -r requirements-dev.txt --upgrade`
 
+The project uses a `setup_env.py` script to ensure the `src` directory is in the Python path. This is automatically imported by the repository scripts.
+
 ## Getting started
 
 For basic terminology, see documentation for [TUF (The Update Framework)][2].
@@ -28,24 +30,24 @@ For basic terminology, see documentation for [TUF (The Update Framework)][2].
 We start out with a dummy application that has already integrated the `tufup.client`.
 See `src/myapp/__init__.py` for details.
 
-The dummy application is bundled using [PyInstaller][3], but `tufup` works with any type of "application bundle" (i.e. just a directory with content representing the application).
+The dummy application is bundled using [cx_Freeze][3], but `tufup` works with any type of "application bundle" (i.e. just a directory with content representing the application).
 
-The example includes a basic PyInstaller `.spec` file that ensures the `tufup` root metadata file (`root.json`) is included in the application bundle.
+The example includes a basic `setup.py` file that ensures the `tufup` root metadata file (`root.json`) is included in the application bundle.
 
 The dummy *application* specifies where all `tufup`-related  files will be stored.
 This is illustrated in `settings.py`. 
 
 The following basic steps are covered:
 
-1. initialize a repository
-2. initial release   
-   1. build the application, including trusted root metadata from the repository
-   2. create an archive for the application and register it in the repo
-3. second release
-   1. build the new release
-   2. create an archive for the new release, create a patch, and register both in the repo
-4. serve the repository on a local test server
-5. run the "installed" application, so it can perform an automatic update
+1. Initialize a repository
+2. Initial release   
+   1. Build the application, including trusted root metadata from the repository
+   2. Create an archive for the application and register it in the repo
+3. Second release
+   1. Build the new release
+   2. Create an archive for the new release, create a patch, and register both in the repo
+4. Serve the repository on a local test server
+5. Run the "installed" application, so it can perform an automatic update
 
 > For quick testing, these steps have been automated in the [PowerShell][12] script [`test_update_cycle.ps1`][13].
 
@@ -58,34 +60,56 @@ Some example scripts are provided for initializing a tufup repository and for ad
 Alternatively, `tufup` offers a command line interface (CLI) for repository actions. 
 Type `tufup -h` on the command line for more information. 
 
-Here's how to set up the example tufup repository, starting from a clean repo, i.e. no `temp_my_app` dir is present in the repo root (as defined by `DEV_DIR` in `settings.py`):
+To set up the example tufup repository with both version 1.0 and 2.0, first create and activate a virtual environment:
 
-Note: If you use the CLI, see `repo_settings.py` for sensible values.
+```batch
+python -m venv venv
+venv\Scripts\activate
+```
 
-1. run `repo_init.py` (CLI: `tufup init`)
-2. run `create_pyinstaller_bundle_win.bat` or `create_pyinstaller_bundle_mac.sh`
-   (note that our `main.spec` ensures that the latest `root.json` metadata file is included in the bundle)
-3. run `repo_add_bundle.py` (CLI: `tufup targets add 1.0 temp_my_app/dist/main temp_my_app/keystore`)
-4. modify the app, and/or increment `APP_VERSION` in `myapp/settings.py`
-5. run the `create_pyinstaller_bundle` script again
-6. run `repo_add_bundle.py` again (CLI: `tufup targets add 2.0 temp_my_app/dist temp_my_app/keystore`)
+Then run:
+```batch
+setup_repo.bat
+```
+
+This script will automatically:
+1. Install all required packages:
+   - Install requirements from requirements.txt
+   - Install development requirements from requirements-dev.txt
+2. Initialize the repository
+3. Create version 1.0:
+   - Set version to 1.0
+   - Build the MSI installer
+   - Add the bundle to repository
+4. Create version 2.0:
+   - Set version to 2.0
+   - Build the MSI installer
+   - Add the bundle to repository
+5. Start the HTTP server
 
 Note: When adding a bundle, `tufup` creates a patch by default, which can take quite some time.
-If you want to skip patch creation, either set `skip_patch=True` in the `Repository.add_bundle()` call, or add the  `-s` option to the CLI command: `tufup targets add -s 2.0 ...`.
+If you want to skip patch creation, either set `skip_patch=True` in the `Repository.add_bundle()` call, or add the  `-s` option to the CLI command: `tufup targets add -s 2.0 dist/tufup-example-2.0-win64.msi temp_my_app/keystore`.
 
 Now we should have a `temp_my_app` dir with the following structure:
 
 ```text
 temp_my_app
-├ build
-├ dist
 ├ keystore
 └ repository
   ├ metadata
   └ targets 
 ```
 
-In the `targets` dir we find two app archives (1.0 and 2.0) and a corresponding patch file.
+And in the project root, we'll have:
+```text
+.
+├ dist
+│ └ tufup-example-1.0-win64.msi
+└ temp_my_app
+  └ (repository files)
+```
+
+In the `targets` dir we find two MSI installers (1.0 and 2.0) and a corresponding patch file.
 
 We can serve the repository on localhost as follows (relative to project root):
 
@@ -97,46 +121,12 @@ That's it for the repo-side.
 
 On the same system (for convenience):
 
-1. To simulate the initial installation on a client device, we do a manual extraction of the archive version 1.0 from the `repository/targets` dir into the `INSTALL_DIR`, specified in `myapp/settings.py`. 
+1. To simulate the initial installation on a client device, you can install the MSI package from the `dist` directory:
+   - Double-click the MSI file to run the installer
+   - Or use the command line: `msiexec /i dist/tufup-example-1.0-win64.msi`
 
-   #### On Windows:
-   In the default example the `INSTALL_DIR` would be the `C:\users\<username>\AppData\Local\Programs\my_app` directory. 
-   You can use `tar -xf my_app-1.0.tar.gz` in PowerShell to extract the bundle.
-
-   #### On macOS:
-   To install the bundle on macOS to the default location, you can use 
-   `mkdir -p ~/Applications/my_app && tar -xf temp_my_app/repository/targets/my_app-1.0.tar.gz -C ~/Applications/my_app`.
-
-2. [optional] To try a patch update, copy the archive version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
-3. Assuming the repo files are being served on localhost, as described above, we can now run the newly extracted executable, `main.exe` or `main`, depending on platform, directly from the `INSTALL_DIR`, and it will perform an update.
+2. [Optional] To try a patch update, copy the MSI version 1.0 into the `TARGET_DIR` (this would normally be done by an installer).
+3. Assuming the repo files are being served on localhost, as described above, we can now run the installed application, and it will perform an update.
 4. Metadata and targets are stored in the `UPDATE_CACHE_DIR`.
 
-BEWARE: The steps above refer to the `INSTALL_DIR` for the `FROZEN` state, typically `C:\users\<username>\AppData\Local\Programs\my_app` on Windows.
-In development, when running the `myapp` example directly from source, i.e. `FROZEN=False`, the `INSTALL_DIR` is different from the actual install dir that would be used in production. See details in [settings.py][4]. 
-
-### Troubleshooting
-
-When playing around with this example-app, it is easy to wind up in an inconsistent state, e.g. due to stale metadata files.
-This may result in tuf role verification errors, for example.
-If this is the case, it is often easiest to start from a clean slate for both repo and client:
-
-1. for the client-side, remove `UPDATE_CACHE_DIR` and `INSTALL_DIR`
-2. for the repo-side, remove `DEV_DIR` (i.e. the `temp_my_app` dir described above)
-3. remove `.tufup_repo_config`
-4. follow the steps above to set up the repo-side and client-side
-
-Alternatively, you could run the `test_update_cycle.ps1` script, which also removes stale example files from the default directories.
-
-[1]: https://github.com/dennisvang/tufup
-[2]: https://theupdateframework.io/
-[3]: https://pyinstaller.org/en/stable/
-[4]: https://github.com/dennisvang/tufup-example/blob/2af43175d39417f9d3d855d7e8fb2cb6ebd3c155/src/myapp/settings.py#L38
-[5]: https://github.com/dennisvang/tufup-example/discussions
-[6]: https://github.com/dennisvang/tufup-example/issues?q=is%3Aissue
-[7]: https://github.com/dennisvang/tufup-example/issues/new
-[8]: https://stackoverflow.com/questions/ask
-[9]: https://github.com/dennisvang/tufup-example/discussions/new?category=q-a
-[10]: https://github.com/dennisvang/tufup/discussions
-[11]: https://github.com/dennisvang/tufup/issues
-[12]: https://learn.microsoft.com/en-ca/powershell/scripting/install/installing-powershell
-[13]: ./test_update_cycle.ps1
+Note: The application will be installed in the default location (typically `C:\Program Files\my_app`). You may need administrator privileges to install the MSI package.

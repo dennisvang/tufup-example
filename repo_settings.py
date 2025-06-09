@@ -20,8 +20,8 @@ MODULE_DIR = pathlib.Path(__file__).resolve().parent
 
 # For development
 DEV_DIR = MODULE_DIR / 'temp_my_app'
-PYINSTALLER_DIST_DIR_NAME = 'dist'
-DIST_DIR = DEV_DIR / PYINSTALLER_DIST_DIR_NAME
+BUILD_DIR = MODULE_DIR / 'build'
+DIST_DIR = BUILD_DIR  # cx_Freeze uses the build directory
 
 # Local repo path and keys path (would normally be offline)
 KEYS_DIR = DEV_DIR / DEFAULT_KEYS_DIR_NAME
