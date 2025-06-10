@@ -1,5 +1,0 @@
-# pip install -r requirements.txt --upgrade
-
-# latest from git repo (https://pip.pypa.io/en/stable/topics/vcs-support/#git)
-tufup @ git+https://github.com/fairread/tufup-msi-example.git@master
-cx_Freeze>=6.15.0

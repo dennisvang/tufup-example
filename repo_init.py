@@ -1,6 +1,4 @@
 import logging
-import setup_env  # This must be imported first to set up the Python path
-
 from tufup.repo import Repository
 
 from myapp.settings import APP_NAME

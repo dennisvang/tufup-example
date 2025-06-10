@@ -9,19 +9,17 @@ Note: Although the example `myapp` is bundled using `cx_Freeze`, this is not req
 Note: Although the example application is written for Windows (or macOS), this only pertains to the directories, defined in `settings.py`, and the script used to run `cx_Freeze`.
 You can simply adapt these to use the example on other operating systems.
 
+## Requirements
+
+- Python 3.11
+- cx_Freeze 8.3.0
+- tufup 0.9.0
+
 ## Questions
 
 If you have any questions, please make sure to check the [existing discussions][5] and [existing issues][6] first. (Also check [`tufup` discussions][10] and [`tufup` issues][11].)
 
 New *questions* can be asked in the [Q&A][9] or on [stackoverflow][8], and *bugs* related to `tufup-example` can be reported [here][7].
-
-## Setup
-
-Create a virtualenv (or equivalent) and install requirements:
-
-`pip install -r requirements.txt -r requirements-dev.txt --upgrade`
-
-The project uses a `setup_env.py` script to ensure the `src` directory is in the Python path. This is automatically imported by the repository scripts.
 
 ## Getting started
 
@@ -73,9 +71,9 @@ setup_repo.bat
 ```
 
 This script will automatically:
-1. Install all required packages:
-   - Install requirements from requirements.txt
-   - Install development requirements from requirements-dev.txt
+1. Install all required packages using pip:
+   - Install the project in editable mode
+   - Install all dependencies from pyproject.toml
 2. Initialize the repository
 3. Create version 1.0:
    - Set version to 1.0
