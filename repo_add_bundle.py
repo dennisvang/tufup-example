@@ -6,7 +6,7 @@ from tufup.repo import Repository
 from repo_settings import DIST_DIR, KEYS_DIR
 
 logger = logging.getLogger(__name__)
-
+logging.basicConfig(level=logging.DEBUG)
 
 if __name__ == '__main__':
     # create archive from latest pyinstaller bundle (assuming we have already
@@ -23,6 +23,7 @@ if __name__ == '__main__':
     # Create repository instance from config file (assuming the repository
     # has already been initialized)
     repo = Repository.from_config()
+    logger.info(f'repo diff method: {repo.binary_diff}')
 
     # Add new app bundle to repository (automatically reads myapp.__version__)
     repo.add_bundle(
