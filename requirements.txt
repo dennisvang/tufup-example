@@ -1,4 +1,4 @@
 # pip install -r requirements.txt --upgrade
 
 # latest from git repo (https://pip.pypa.io/en/stable/topics/vcs-support/#git)
-tufup @ git+https://github.com/dennisvang/tufup.git@master
+tufup @ git+https://github.com/dennisvang/tufup.git@issue154-custom-patcher
