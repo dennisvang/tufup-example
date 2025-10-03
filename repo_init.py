@@ -32,7 +32,7 @@ if __name__ == '__main__':
     repo = Repository(
         app_name=APP_NAME,
         app_version_attr='myapp.__version__',
-        binary_diff=HDiffPatch,
+        binary_diff=HDiffPatch,  # OPTIONAL: set None to use default bsdiff4
         repo_dir=REPO_DIR,
         keys_dir=KEYS_DIR,
         key_map=KEY_MAP,
