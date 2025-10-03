@@ -2,6 +2,7 @@ import logging
 
 from tufup.repo import Repository
 
+from customdiff import HDiffPatch
 from myapp.settings import APP_NAME
 from repo_settings import (
     ENCRYPTED_KEYS,
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     repo = Repository(
         app_name=APP_NAME,
         app_version_attr='myapp.__version__',
+        binary_diff=HDiffPatch,
         repo_dir=REPO_DIR,
         keys_dir=KEYS_DIR,
         key_map=KEY_MAP,
