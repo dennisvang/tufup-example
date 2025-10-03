@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         # for supported versions see https://devguide.python.org/versions/
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     runs-on: ${{ matrix.os }}
 
@@ -25,9 +25,9 @@ jobs:
         shell: pwsh  # use PowerShell Core, also on macOS
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
         pip install -r requirements-dev.txt --upgrade
         pip install -r requirements.txt --upgrade
     - name: lint with ruff
-      run: ruff --output-format=github .
+      run: ruff check --output-format=github .
     - name: identify powershell version
       run: $PSVersionTable  # or $PSVersionTable.PSEdition
       # https://docs.github.com/en/actions/learn-github-actions/contexts#runner-context
@@ -87,6 +87,7 @@ jobs:
       run: |
         python -m http.server -d ./temp_my_app/repository &
         sleep 5
+        (Invoke-WebRequest http://localhost:8000).StatusCode
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR/main skip"
     - name: proof of the pudding (i.e. verify that install dir contains my_app v2.0)
       run: |
