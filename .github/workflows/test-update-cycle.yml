@@ -36,7 +36,7 @@ jobs:
         pip install -r requirements-dev.txt --upgrade
         pip install -r requirements.txt --upgrade
     - name: lint with ruff
-      run: ruff --output-format=github .
+      run: ruff check --output-format=github .
     - name: identify powershell version
       run: $PSVersionTable  # or $PSVersionTable.PSEdition
       # https://docs.github.com/en/actions/learn-github-actions/contexts#runner-context
