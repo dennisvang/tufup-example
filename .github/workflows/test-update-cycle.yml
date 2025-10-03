@@ -87,6 +87,7 @@ jobs:
       run: |
         python -m http.server -d ./temp_my_app/repository &
         sleep 5
+        (Invoke-WebRequest http://localhost:8000).StatusCode
         Invoke-Expression "$Env:MYAPP_INSTALL_DIR/main skip"
     - name: proof of the pudding (i.e. verify that install dir contains my_app v2.0)
       run: |
